@@ -36,11 +36,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#d2a27c"
+                android:background="#547C94"
                 android:orientation="vertical"
                 android:gravity="center">
 
                 <FrameLayout
+                    android:id="@+id/drawer_avatar_frame"
+                    android:visibility="gone"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
                     android:layout_margin="2dp">
@@ -79,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#bc987d"
+                android:background="#41728A"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -107,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#aa9e91"
+                android:background="#365C75"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -135,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#9d9185"
+                android:background="#33425E"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -163,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#898078"
+                android:background="#363E59"
                 android:orientation="vertical"
                 android:gravity="center">
 
