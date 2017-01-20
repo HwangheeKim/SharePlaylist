@@ -67,4 +67,18 @@ var Video = mongoose.model('video', videoSchema, 'video');
 
 ////////*    Server Implementation    *////////
 
+// POST request for user enrollment
+app.post('/user/enroll', function(req, res) {
+    console.log("[user/enroll] Got request");
+
+    User.findOneAndUpdate({userID:req.body['userID']}, req.body, {upsert:true}, function(err, doc) {
+        if (err) return res.send(500, {error: err});
+
+        console.log("DONE ENROLL NEW USER " + req.body);
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.write(JSON.stringify({result: 'OK'}));
+        res.end();
+    });
+});
+
 app.listen(8080, function() {console.log("Listening on port #8080")});
