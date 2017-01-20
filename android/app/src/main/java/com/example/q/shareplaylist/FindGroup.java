@@ -18,8 +18,8 @@ public class FindGroup extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_group, container, false);
 
-        Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.findgroup_toolbar);
-        ((AppBarLayout)rootView.findViewById(R.id.findgroup_appbar)).setExpanded(true);
+//        Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.findgroup_toolbar);
+//        ((AppBarLayout)rootView.findViewById(R.id.findgroup_appbar)).setExpanded(true);
 
         GridView gridView = (GridView)rootView.findViewById(R.id.findgroup_gridview);
         ViewCompat.setNestedScrollingEnabled(gridView, true);

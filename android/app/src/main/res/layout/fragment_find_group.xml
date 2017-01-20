@@ -27,9 +27,20 @@
                 android:id="@+id/findgroup_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="#521c59"
                 android:popupTheme="@style/Widget.AppCompat.ActionBar"
+                android:gravity="center"
                 app:layout_collapseMode="pin">
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textColor="#c771ed"
+                    android:hint="Search you group here"
+                    android:textColorHint="#9e66a6"/>
+                
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
