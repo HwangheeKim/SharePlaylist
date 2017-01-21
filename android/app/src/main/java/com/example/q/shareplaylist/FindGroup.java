@@ -1,5 +1,6 @@
 package com.example.q.shareplaylist;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -23,7 +25,6 @@ import com.koushikdutta.ion.Ion;
 import java.net.URLDecoder;
 
 public class FindGroup extends Fragment {
-    public static int ADD_GROUP = 0x1002;
     private GroupAdapter groupAdapter;
     private EditText editText;
     private GridView gridView;
@@ -39,6 +40,14 @@ public class FindGroup extends Fragment {
 
         groupAdapter = new GroupAdapter();
         gridView.setAdapter(groupAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.putExtra("groupID", groupAdapter.getItem(position).getGroupID());
+                ((MainActivity)getActivity()).onActivityResult(MainActivity.GROUP_SELECTED, Activity.RESULT_OK, intent);
+            }
+        });
 
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.findgroup_swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -49,7 +58,6 @@ public class FindGroup extends Fragment {
             }
         });
 
-        // TODO : URGENT, Add group
         FloatingActionButton fab = (FloatingActionButton)rootView.findViewById(R.id.findgroup_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,11 +67,12 @@ public class FindGroup extends Fragment {
                 } else {
                     FragmentManager fm = getFragmentManager();
                     AddGroupDialog addGroupDialog = new AddGroupDialog();
-                    addGroupDialog.setTargetFragment(FindGroup.this, ADD_GROUP);
+                    addGroupDialog.setTargetFragment(FindGroup.this, MainActivity.ADD_GROUP);
                     addGroupDialog.show(fm, "ADD GROUP");
                 }
             }
         });
+
 
         // TODO : Search group
 
