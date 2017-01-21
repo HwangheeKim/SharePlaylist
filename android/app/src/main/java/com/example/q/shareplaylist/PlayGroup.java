@@ -1,15 +1,35 @@
 package com.example.q.shareplaylist;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class PlayGroup extends Fragment {
@@ -25,7 +45,7 @@ public class PlayGroup extends Fragment {
 
         viewPager = (ViewPager)rootView.findViewById(R.id.playgroup_pager);
         viewPager.setOffscreenPageLimit(2);
-        pagerAdapter = new PlayGroupPager(getFragmentManager());
+        pagerAdapter = new PlayGroupPager(getActivity().getSupportFragmentManager());
 
         viewPager.setAdapter(pagerAdapter);
 
@@ -33,27 +53,21 @@ public class PlayGroup extends Fragment {
     }
 }
 
-class PlayGroupPager extends FragmentStatePagerAdapter {
-    private PlayGroupPlayer player;
-    private PlayGroupAddVideo addVideo;
-    private PlayGroupHistory history;
+class PlayGroupPager extends FragmentPagerAdapter {
 
     public PlayGroupPager(FragmentManager fm) {
         super(fm);
-        player = new PlayGroupPlayer();
-        addVideo = new PlayGroupAddVideo();
-        history = new PlayGroupHistory();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return player;
+                return new PlayGroupPlayer();
             case 1:
-                return history;
+                return new PlayGroupHistory();
             case 2:
-                return addVideo;
+                return new PlayGroupAddVideo();
             default:
                 return null;
         }
