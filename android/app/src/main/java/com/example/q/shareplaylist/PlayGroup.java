@@ -132,7 +132,6 @@ public class PlayGroup extends Fragment {
 
 
         return view;
-
     }
 
 

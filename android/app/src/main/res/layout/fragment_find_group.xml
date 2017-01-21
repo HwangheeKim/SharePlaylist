@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/findgroup_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
@@ -32,7 +33,15 @@
                 android:gravity="center"
                 app:layout_collapseMode="pin">
 
+                <!-- Dummy item to prevent EditText from receiving focus -->
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
+
                 <EditText
+                    android:id="@+id/findgroup_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
@@ -53,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_gravity="end|bottom"
+        android:src="@drawable/plus"
         app:layout_anchor="@+id/findgroup_nestedview"
         app:layout_anchorGravity="bottom|end"
         />
@@ -66,13 +76,20 @@
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <GridView
-            android:id="@+id/findgroup_gridview"
-            android:numColumns="1"
-            android:horizontalSpacing="0dp"
-            android:verticalSpacing="0dp"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/findgroup_swiperefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <GridView
+                android:id="@+id/findgroup_gridview"
+                android:numColumns="1"
+                android:horizontalSpacing="0dp"
+                android:verticalSpacing="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

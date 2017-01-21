@@ -40,7 +40,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/item_group_player"
+            android:id="@+id/item_group_creator"
             android:text="Hwanghee Kim"
             android:textColor="#fff"
             android:textSize="15dp"

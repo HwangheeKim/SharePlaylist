@@ -35,25 +35,24 @@ var User = mongoose.model('user', userSchema, 'user');
 
 var groupSchema = new Schema({
     groupName : {type:String, required:true},
-    creator : {type:Schema.ObjectId, ref:'User'}
+    creatorID : {type:String, required:true},
+    creatorName : {type:String, required:true},
+    
+    currentPlayingIndex : {type:Number, required:true, default:0},
+    currentPlyingVideo : [{type:Schema.Types.ObjectId, ref:'Video'}],
+    currentPlayer : [{type:String}],
+    startedAt : {type:Date, default:0},
+
+    like : {type:Number, default:0}
 });
-var Group = mongoose.model('group', groupSchema, 'group');
+var Group = mongoose.model('groups', groupSchema, 'groups');
 
 var playlistSchema = new Schema({
-    userID : {type:Schema.ObjectId, ref:'User', required:true},
+    userID : {type:String, required:true},
     playlistName : {type:String, required:true},
     videos : [{type:Schema.Types.ObjectId, ref:'Video'}],
 });
 var Playlist = mongoose.model('playlist', playlistSchema, 'playlist');
-
-var playingSchema = new Schema({
-    groupID : {type:Schema.Types.ObjectId, ref:'Group'},
-    currentPlaying : {type:Number, required:true, default:0},
-    player : [{type:Schema.Types.ObjectId, ref:'User'}],
-    startedAt : {type:Date, default:0},
-    like : {type:Number, default:0}
-});
-var Playing = mongoose.model('playing', playingSchema, 'playing');
 
 var videoSchema = new Schema({
     url : {type:String, required:true},
@@ -74,9 +73,36 @@ app.post('/user/enroll', function(req, res) {
     User.findOneAndUpdate({userID:req.body['userID']}, req.body, {upsert:true}, function(err, doc) {
         if (err) return res.send(500, {error: err});
 
-        console.log("DONE ENROLL NEW USER " + req.body);
+        console.log("DONE ENROLL NEW USER " + JSON.stringify(req.body));
         res.writeHead(200, {'Content-Type':'application/json'});
         res.write(JSON.stringify({result: 'OK'}));
+        res.end();
+    });
+});
+
+// GET request for all group information
+app.get('/group/all', function(req, res) {
+    console.log("[group/all] Got request");
+
+    Group.find({}, function(err, result) {
+        if (err) return res.send(500, {error: err});
+
+        res.writeHead(200, {'Content-Type' : 'application/json'});
+        res.write(JSON.stringify(result));
+        res.end();
+    });
+});
+
+// POST request for new group
+app.post('/group/new/', function(req, res) {
+    console.log("[group/new] Got request");
+
+    var newGroup = new Group(req.body);
+    newGroup.save(function(err1) {
+        if (err1) return res.send(500, {error: err1});
+
+        res.writeHead(200, {'Content-Type' : 'application/json'});
+        res.write(JSON.stringify({Result : "OK"}));
         res.end();
     });
 });

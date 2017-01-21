@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 break;
             case R.id.drawer_playgroup:
+                // TODO : Set argument
+                Bundle args = new Bundle();
+                args.putString("URL", "SOMETHING");
+                playGroup.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
                 break;
             case R.id.drawer_myplaylist:
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private boolean isLoggedIn() {
+    static boolean isLoggedIn() {
         return AccessToken.getCurrentAccessToken() != null;
     }
 
