@@ -29,9 +29,10 @@ var userSchema = new Schema({
     userID : {type:String, required:true},
     userName : {type:String, required:true},
     picture : {type:String, default:"http://www.ogubin.com/images/empty_profile2.png"},
-    current : {type:Schema.ObjectId, ref:'Group'}
+    current : {type:Schema.Types.ObjectId, ref:'Group'},
+    playlist : [{type:Schema.Types.ObjectId, ref:'Video'}]
 });
-var User = mongoose.model('user', userSchema, 'user');
+var User = mongoose.model('User', userSchema, 'User');
 
 var groupSchema = new Schema({
     groupName : {type:String, required:true},
@@ -45,14 +46,7 @@ var groupSchema = new Schema({
 
     like : {type:Number, default:0}
 });
-var Group = mongoose.model('groups', groupSchema, 'groups');
-
-var playlistSchema = new Schema({
-    userID : {type:String, required:true},
-    playlistName : {type:String, required:true},
-    videos : [{type:Schema.Types.ObjectId, ref:'Video'}],
-});
-var Playlist = mongoose.model('playlist', playlistSchema, 'playlist');
+var Group = mongoose.model('Groups', groupSchema, 'Groups');
 
 var videoSchema = new Schema({
     url : {type:String, required:true},
@@ -60,11 +54,26 @@ var videoSchema = new Schema({
     uploader : {type:String},
     thumbnail : {type:String}
 });
-var Video = mongoose.model('video', videoSchema, 'video');
+var Video = mongoose.model('Video', videoSchema, 'Video');
 
 
 
 ////////*    Server Implementation    *////////
+
+// GET request for all users
+app.get('/user/all', function(req, res) {
+    console.log("[/user/all] Got request");
+
+    User.find({}).exec(function(err, result) {
+        if (err) return res.send(500, {error: err});
+    
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.write(JSON.stringify(result));
+        res.end();
+    });
+
+});
+
 
 // POST request for user enrollment
 app.post('/user/enroll', function(req, res) {
@@ -104,6 +113,24 @@ app.post('/group/new/', function(req, res) {
         res.writeHead(200, {'Content-Type' : 'application/json'});
         res.write(JSON.stringify({Result : "OK"}));
         res.end();
+    });
+});
+
+// GET request for playlist for user with 'userID'
+app.get('/playlist/:userID', function(req, res) {
+    console.log("[/playlist/:userID] Got request");
+    User.findOne({userID : req.params.userID})
+        .populate('playlist')
+        .exec(function(err, result) {
+            if (err) return res.send(500, {error: err});
+
+            res.writeHead(200, {'Content-Type' : 'application/json'});
+            if(result.hasOwnProperty('playlist')) {
+                res.write(JSON.stringify(result['playlist']));
+            } else {
+                res.write(JSON.stringify([]));
+            }
+            res.end();
     });
 });
 
