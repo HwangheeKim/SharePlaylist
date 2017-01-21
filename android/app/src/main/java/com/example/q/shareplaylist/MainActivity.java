@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private boolean isLoggedIn() {
+    static boolean isLoggedIn() {
         return AccessToken.getCurrentAccessToken() != null;
     }
 

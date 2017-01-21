@@ -47,7 +47,7 @@ public class GroupAdapter extends BaseAdapter {
         ((TextView)convertView.findViewById(R.id.item_group_name))
                 .setText(groupDatas.get(position).getGroupName());
         ((TextView)convertView.findViewById(R.id.item_group_creator))
-                .setText(groupDatas.get(position).getCreator());
+                .setText(groupDatas.get(position).getCreatorName());
         ((TextView)convertView.findViewById(R.id.item_group_status))
                 .setText(Integer.toString(groupDatas.get(position).getStatus()));
 
@@ -56,8 +56,8 @@ public class GroupAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(String groupID, String groupName, String creator, String thumbnail, int status) {
-        groupDatas.add(new GroupData(groupID, groupName, creator, thumbnail, status));
+    public void add(String groupID, String groupName, String creatorID, String creatorName, String thumbnail, int status) {
+        groupDatas.add(new GroupData(groupID, groupName, creatorID, creatorName, thumbnail, status));
     }
 
     public void add(GroupData groupData) {
@@ -72,14 +72,16 @@ public class GroupAdapter extends BaseAdapter {
 class GroupData {
     private String groupID;
     private String groupName;
-    private String creator;
+    private String creatorID;
+    private String creatorName;
     private String thumbnail;
     private int status; // People in the group
 
-    public GroupData(String groupID, String groupName, String creator, String thumbnail, int status) {
+    public GroupData(String groupID, String groupName, String creatorID, String creatorName, String thumbnail, int status) {
         this.groupID = groupID;
         this.groupName = groupName;
-        this.creator = creator;
+        this.creatorID = creatorID;
+        this.creatorName = creatorName;
         this.thumbnail = thumbnail;
         this.status = status;
     }
@@ -100,12 +102,20 @@ class GroupData {
         this.groupName = groupName;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorID() {
+        return creatorID;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorID(String creatorID) {
+        this.creatorID = creatorID;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
     public String getThumbnail() {
