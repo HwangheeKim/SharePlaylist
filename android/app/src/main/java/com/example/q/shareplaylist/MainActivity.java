@@ -1,36 +1,21 @@
 package com.example.q.shareplaylist;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -40,8 +25,6 @@ import org.json.JSONObject;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
@@ -106,6 +89,10 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 break;
             case R.id.drawer_playgroup:
+                // TODO : Set argument
+                Bundle args = new Bundle();
+                args.putString("URL", "SOMETHING");
+                playGroup.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
                 break;
             case R.id.drawer_myplaylist:
@@ -137,7 +124,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private boolean isLoggedIn() {
+    static boolean isLoggedIn() {
         return AccessToken.getCurrentAccessToken() != null;
     }
 
