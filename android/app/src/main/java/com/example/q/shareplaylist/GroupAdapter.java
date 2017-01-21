@@ -28,7 +28,7 @@ public class GroupAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public GroupData getItem(int position) {
         return groupDatas.get(position);
     }
 
@@ -58,6 +58,7 @@ public class GroupAdapter extends BaseAdapter {
 
     public void add(String groupID, String groupName, String creatorID, String creatorName, String thumbnail, int status) {
         groupDatas.add(new GroupData(groupID, groupName, creatorID, creatorName, thumbnail, status));
+        notifyDataSetChanged();
     }
 
     public void add(GroupData groupData) {

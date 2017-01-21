@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
 
     static int REQUEST_LOGIN = 0x1001;
+    static int ADD_GROUP = 0x1002;
+    static int GROUP_SELECTED = 0x1003;
     static String serverURL = "http://52.78.101.202:8080";
     static String userID = "";
     static String userName = "";
@@ -89,10 +91,6 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 break;
             case R.id.drawer_playgroup:
-                // TODO : Set argument
-                Bundle args = new Bundle();
-                args.putString("URL", "SOMETHING");
-                playGroup.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
                 break;
             case R.id.drawer_myplaylist:
@@ -115,13 +113,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
+
         if (requestCode == REQUEST_LOGIN) {
             updateMyProfile(true);
+        } else if (requestCode == GROUP_SELECTED) {
+            Log.d("onActivityResult", "I'm selected! " + data.getStringExtra("groupID"));
+            playGroup = new PlayGroup();
+            Bundle args = new Bundle();
+            args.putString("groupID", data.getStringExtra("groupID"));
+            playGroup.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     static boolean isLoggedIn() {
