@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
         findGroup = new FindGroup();
         myPlaylist = new MyPlaylist();
         myProfile = new MyProfile();
-        playGroup = new PlayGroup();
 
         // Set startup fragment, need to be modified!
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 break;
             case R.id.drawer_playgroup:
+                playGroup = new PlayGroup();
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
                 break;
             case R.id.drawer_myplaylist:

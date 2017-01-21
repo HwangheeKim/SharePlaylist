@@ -26,10 +26,8 @@ public class PlayGroupPlayer extends Fragment {
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
     private String video="ePpPVE-GGJw";
-    //private List<String> videos; private int startIndex;
     private int initTime;
 
-    JSONObject jsonObject;
     private View view;
 
     @Nullable
@@ -38,20 +36,20 @@ public class PlayGroupPlayer extends Fragment {
         view = inflater.inflate(R.layout.fragment_play_group_player, container, false);
 
         setTypeface();
-        initYouTube();
 
         return view;
     }
 
     private void setTypeface(){
         Typeface myTypeface = Typeface.createFromAsset(getActivity().getAssets(), "Cassandra.ttf");
-
         TextView uploaded = (TextView)view.findViewById(R.id.textView2);
         TextView played= (TextView)view.findViewById(R.id.textView3);
         uploaded.setTypeface(myTypeface);
         played.setTypeface(myTypeface);
     }
 
+
+/*
     private void initYouTube(){
         youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.fragment3);
         //youTubePlayerView = (YouTubePlayerView) view.findViewById(R.id.view);
@@ -103,19 +101,19 @@ public class PlayGroupPlayer extends Fragment {
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
 
 
-        /*    FragmentManager fragmentManager = getActivity().getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment2, youTubePlayerFragment);
-            fragmentTransaction.commit();*/
-
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment2, youTubePlayerFragment);
+        fragmentTransaction.commit();
     }
 
-//    @Override
-//    public void onDestroyView(){
-//        FragmentManager fragmentManager = getActivity().getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.remove(youTubePlayerFragment);
-//        fragmentTransaction.commit();
-//        super.onDestroyView();
-//    }
+    @Override
+    public void onDestroyView(){
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(youTubePlayerFragment);
+        fragmentTransaction.commit();
+        super.onDestroyView();
+    }
+*/
 }
