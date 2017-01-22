@@ -1,7 +1,9 @@
 package com.example.q.shareplaylist;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +38,64 @@ public class PlayGroupLineup extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 // TODO : ONGOING, When item clicked, show options (add to my playlist / remove from lineup)
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("What?")
+                        .setPositiveButton("Add to my playlist", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                JsonObject jsonObject= new JsonObject();
+                                VideoData videoData= adapter.getItem(position);
+                                try {
+                                    jsonObject.addProperty("url", videoData.getUrl());
+                                    jsonObject.addProperty("title", URLEncoder.encode(videoData.getTitle(), "utf-8"));
+                                    jsonObject.addProperty("uploader", URLEncoder.encode(videoData.getUploader(), "utf-8"));
+                                    jsonObject.addProperty("thumbnail", videoData.getThumbnail());
+                                } catch (Exception e) { e.printStackTrace(); }
+
+                                Ion.with(getContext()).load(MainActivity.serverURL+"/user/myplaylist/" + MainActivity.userID).setJsonObjectBody(jsonObject)
+                                        .asJsonArray().setCallback(new FutureCallback<JsonArray>() {
+                                    @Override
+                                    public void onCompleted(Exception e, JsonArray result) {
+                                        loadFromServer();
+                                        ((MainActivity)getActivity()).notifyMyplaylistAdded();
+                                    }
+                                });
+
+                            }
+                        });
+
+                if (adapter.getItem(position).getPlayerID().equals(MainActivity.userID)) {
+                    builder.setNegativeButton("Remove from lineup", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            removeLineup(position);
+                        }
+                    });
+                }
+
+                builder.create().show();
             }
         });
 
         return rootView;
+    }
+
+    private void removeLineup(final int position) {
+        JsonObject json = new JsonObject();
+        json.addProperty("url", adapter.getItem(position).getUrl());
+        json.addProperty("playerID", adapter.getItem(position).getPlayerID());
+
+        Ion.with(getContext())
+                .load(MainActivity.serverURL+"/group/"+MainActivity.currentGroup+"/removeLineup")
+                .setJsonObjectBody(json)
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                loadFromServer();
+            }
+        });
     }
 
     private void loadFromServer() {
@@ -56,14 +110,17 @@ public class PlayGroupLineup extends Fragment {
                     JsonObject record = lineup.get(i).getAsJsonObject();
                     String titleDecoded = "";
                     String uploaderDecoded = "";
+                    String playerNameDecoded = "";
                     try {
                         titleDecoded = URLDecoder.decode(record.get("title").getAsString(), "utf-8");
                         uploaderDecoded = URLDecoder.decode(record.get("uploader").getAsString(), "utf-8");
+                        playerNameDecoded = URLDecoder.decode(record.get("playerName").getAsString(), "utf-8");
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
                     adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
-                            record.get("thumbnail").getAsString());
+                            record.get("thumbnail").getAsString(), record.get("playerID").getAsString(),
+                            playerNameDecoded, record.get("duration").getAsString(), record.get("like").getAsInt());
                 }
             }
         });

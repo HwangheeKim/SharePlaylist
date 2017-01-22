@@ -72,7 +72,7 @@ public class MyPlaylist extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent searchIntent = new Intent(getActivity(), LoaderActivity.class);
+                Intent searchIntent = new Intent(getContext(), loaderActivity.class);
                 getActivity().startActivityForResult(searchIntent, MainActivity.SELECT_UPLOAD);
             }
         });

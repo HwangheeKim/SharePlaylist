@@ -66,6 +66,12 @@ public class VideoAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void add(String url, String title, String uploader, String thumbnail, String playerID,
+                    String playerName, String duration, int like) {
+        videos.add(new VideoData(url, title, uploader, thumbnail, playerID, playerName, duration, like));
+        notifyDataSetChanged();
+    }
+
     public void add(VideoData videoData) {
         videos.add(videoData);
         notifyDataSetChanged();
@@ -78,11 +84,27 @@ class VideoData {
     private String uploader;
     private String thumbnail;
 
+    private String playerID;
+    private String playerName;
+    private String duration;
+    private int like;
+
     public VideoData(String url, String title, String uploader, String thumbnail) {
         this.url = url;
         this.title = title;
         this.uploader = uploader;
         this.thumbnail = thumbnail;
+    }
+
+    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, String duration, Integer like) {
+        this.url = url;
+        this.title = title;
+        this.uploader = uploader;
+        this.thumbnail = thumbnail;
+        this.playerID = playerID;
+        this.playerName = playerName;
+        this.duration = duration;
+        this.like = like;
     }
 
     public String getUrl() {
@@ -115,5 +137,37 @@ class VideoData {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public Integer getLike() {
+        return like;
+    }
+
+    public void setLike(Integer like) {
+        this.like = like;
     }
 }

@@ -34,11 +34,13 @@ public class PlayGroup extends Fragment {
         viewPager = (ViewPager)rootView.findViewById(R.id.playgroup_pager);
 
         player = new PlayGroupPlayer();
-        player.setTargetFragment(this, MainActivity.PLAY_GROUP);
         lineup = new PlayGroupLineup();
-        lineup.setTargetFragment(this, MainActivity.PLAY_GROUP);
         addVideo = new PlayGroupAddVideo();
-        addVideo.setTargetFragment(this, MainActivity.PLAY_GROUP);
+
+        // These two lines were problem but don't know why....
+//        player.setTargetFragment(this, MainActivity.PLAY_GROUP);
+//        lineup.setTargetFragment(this, MainActivity.PLAY_GROUP);
+//        addVideo.setTargetFragment(this, MainActivity.PLAY_GROUP);
         pagerAdapter = new PlayGroupPager(getActivity().getSupportFragmentManager(),
                                           player, lineup, addVideo);
         viewPager.setAdapter(pagerAdapter);

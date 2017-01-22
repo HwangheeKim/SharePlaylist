@@ -36,6 +36,34 @@ public class PlayGroupAddVideo extends Fragment {
         listView.setAdapter(adapter);
 
         // Load Playlist From Server
+        loadPlaylist();
+
+        // Request Search query
+        rootView.findViewById(R.id.playgroup_add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Load search result to the list
+                if(editText.getText().toString().equals("")) {
+                    Snackbar.make(listView, "Enter the search keyword", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    youtubeSearch();
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Snackbar.make(listView, "Video (" + adapter.getItem(position).getTitle() + ") will be added", Snackbar.LENGTH_SHORT).show();
+//                ((PlayGroup)getTargetFragment()).addVideoToLineup(adapter.getItem(position));
+                ((MainActivity)getActivity()).addVideoToLineup(adapter.getItem(position));
+            }
+        });
+        return rootView;
+    }
+
+    public void loadPlaylist() {
+        adapter.clear();
         Ion.with(getContext()).load(MainActivity.serverURL+"/user/" + MainActivity.userID)
                 .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
@@ -57,28 +85,6 @@ public class PlayGroupAddVideo extends Fragment {
                 }
             }
         });
-
-        // Request Search query
-        rootView.findViewById(R.id.playgroup_add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Load search result to the list
-                if(editText.getText().toString().equals("")) {
-                    Snackbar.make(listView, "Enter the search keyword", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    youtubeSearch();
-                }
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(listView, "Video (" + adapter.getItem(position).getTitle() + ") will be added", Snackbar.LENGTH_SHORT).show();
-                ((PlayGroup)getTargetFragment()).addVideoToLineup(adapter.getItem(position));
-            }
-        });
-        return rootView;
     }
 
     void youtubeSearch() {
