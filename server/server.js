@@ -98,6 +98,34 @@ app.post('/user/enroll', function(req, res) {
     });
 });
 
+// GET request for playlist
+app.get('/user/myplaylist/:userID', function(req,res){
+    console.log("[user/:userID Got get request");
+
+    User.findOne({userID:req.params.userID})
+        .exec(function(err,result){
+        if(err) return res.send(500, {error:err});
+
+        res.writeHead(200, {'Content_Type' : 'application/json'});
+        res.write(JSON.stringify(result.playlist));
+        res.end();
+    });
+});
+
+// POST request from user
+app.post('/user/myplaylist/:userID', function(req, res){
+    console.log("[user/:userID] Got post request");
+    
+    User.findOneAndUpdate({userID:req.params.userID}, 
+            {$push: {"playlist":req.body}},
+            {safe: true, upsert: true, new: true}, 
+            function(err, model) {
+                if(err) return res.send(500, {error:err});
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({Result: "OK"}));
+                res.end();
+            });
+});
 
 // GET request for all group information
 app.get('/group/all', function(req, res) {
@@ -154,34 +182,5 @@ app.post('/group/new/', function(req, res) {
         res.end();
     });
 });
-
-//POST request for new playlist
-app.post('/playlist/:userID', function(req, res) {
-    console.log("[/playlist/:userID] Got request");
-    
-    var newVideoSchema = new videoSchema(req.body);
-    newVideoSchema.save(function(err1) {
-        if (err1) return res.send(500, {error: err1});
-
-        res.writeHead(200, {'Content-Type' : 'application/json'});
-        res.write(JSON.stringify({Result : "OK"}));
-        res.end();
-    });
-});
-
-//DELETE request for playlist
-app.delete('playlist/:userID', function(req, res) {
-    
-
-
-
-});
-
-
-
-
-
-
-
 
 app.listen(8080, function() {console.log("Listening on port #8080")});
