@@ -171,6 +171,22 @@ app.post('/group/:groupID/addLineup', function(req, res) {
             });
 });
 
+// POST request for remove videoLineup to the group
+// TODO : Becareful! pull delete every records that match the condition!!!!
+app.post('/group/:groupID/removeLineup', function(req, res) {
+    console.log("[/group/:groupID/removeLineup] Got request");
+
+    Group.findByIdAndUpdate(req.params.groupID,
+            {$pull: {"videoLineup": {url: req.body['url'], playerID: req.body['playerID']}}},
+            function(err, model) {
+                if (err) throw err;
+
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({Result : "OK"}));
+                res.end();
+            });
+});
+
 // POST request for new group
 app.post('/group/new/', function(req, res) {
     console.log("[group/new] Got request");
