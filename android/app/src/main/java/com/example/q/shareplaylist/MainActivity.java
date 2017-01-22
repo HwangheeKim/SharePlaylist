@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     static String serverURL = "http://52.78.101.202:8080";
     static String userID = "";
     static String userName = "";
+    static String currentGroup = "";
 
     private DrawerLayout drawer;
     private FindGroup findGroup;
@@ -91,8 +92,12 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 break;
             case R.id.drawer_playgroup:
-                playGroup = new PlayGroup();
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
+                if(currentGroup.equals("")) {
+                    Snackbar.make(findViewById(R.id.main_container), "You have to join the group!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    playGroup = new PlayGroup();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
+                }
                 break;
             case R.id.drawer_myplaylist:
                 if(userID.equals("")) {
@@ -125,11 +130,7 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == REQUEST_LOGIN) {
             updateMyProfile(true);
         } else if (requestCode == GROUP_SELECTED) {
-            Log.d("onActivityResult", "I'm selected! " + data.getStringExtra("groupID"));
             playGroup = new PlayGroup();
-            Bundle args = new Bundle();
-            args.putString("groupID", data.getStringExtra("groupID"));
-            playGroup.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
         }
 
@@ -187,6 +188,12 @@ public class MainActivity extends AppCompatActivity
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        Log.d("enrollMe onCompleted", result.toString());
+
+                        if(result.has("current")) {
+                            currentGroup = result.get("current").getAsString();
+                        }
+
                         ImageView drawerAvatar = (ImageView)findViewById(R.id.drawer_avatar);
                         String imgurl = "https://graph.facebook.com/" + userID + "/picture?height=500";
                         Picasso.with(getApplicationContext()).load(imgurl).into(drawerAvatar);

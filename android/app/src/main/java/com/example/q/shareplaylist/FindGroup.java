@@ -42,10 +42,21 @@ public class FindGroup extends Fragment {
         gridView.setAdapter(groupAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.putExtra("groupID", groupAdapter.getItem(position).getGroupID());
-                ((MainActivity)getActivity()).onActivityResult(MainActivity.GROUP_SELECTED, Activity.RESULT_OK, intent);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                JsonObject json = new JsonObject();
+                json.addProperty("userID", MainActivity.userID);
+                json.addProperty("current", groupAdapter.getItem(position).getGroupID());
+
+                Ion.with(getContext()).load(MainActivity.serverURL+"/user/enroll")
+                        .setJsonObjectBody(json).asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                MainActivity.currentGroup = groupAdapter.getItem(position).getGroupID();
+                                Intent intent = new Intent();
+                                ((MainActivity)getActivity()).onActivityResult(MainActivity.GROUP_SELECTED, Activity.RESULT_OK, intent);
+                            }
+                        });
             }
         });
 
