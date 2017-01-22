@@ -31,7 +31,6 @@ public class PlayGroup extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_play_group, container, false);
-
         viewPager = (ViewPager)rootView.findViewById(R.id.playgroup_pager);
 
         player = new PlayGroupPlayer();
@@ -65,8 +64,8 @@ public class PlayGroup extends Fragment {
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
     }
 
-    public void addVideoToLineup() {
-
+    public void addVideoToLineup(VideoData videoData) {
+        lineup.addToLineup(videoData);
     }
 
     @Override

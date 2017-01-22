@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class PlayGroupAddVideo extends Fragment {
@@ -36,13 +37,25 @@ public class PlayGroupAddVideo extends Fragment {
         listView.setAdapter(adapter);
 
         // Load Playlist From Server
-        Ion.with(getContext()).load(MainActivity.serverURL+"/playlist/" + MainActivity.userID)
-                .asJsonArray().setCallback(new FutureCallback<JsonArray>() {
+        Ion.with(getContext()).load(MainActivity.serverURL+"/user/" + MainActivity.userID)
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
-            public void onCompleted(Exception e, JsonArray result) {
-                // TODO : Check whether playlist fetched correctly
-                // TODO : Convert information into item_video
+            public void onCompleted(Exception e, JsonObject result) {
                 Log.d("Load user's playlist", result.toString());
+                JsonArray playlist = result.get("playlist").getAsJsonArray();
+                for (int i=0 ; i<playlist.size() ; i++) {
+                    JsonObject record = playlist.get(i).getAsJsonObject();
+                    String titleDecoded = "";
+                    String uploaderDecoded = "";
+                    try {
+                        titleDecoded = URLDecoder.decode(record.get("title").getAsString(), "utf-8");
+                        uploaderDecoded = URLDecoder.decode(record.get("uploader").getAsString(), "utf-8");
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                    adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
+                            record.get("thumbnail").getAsString());
+                }
             }
         });
 
@@ -62,8 +75,8 @@ public class PlayGroupAddVideo extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO : Add selected video to the group's videoLineup
                 Snackbar.make(listView, "Video (" + adapter.getItem(position).getTitle() + ") will be added", Snackbar.LENGTH_SHORT).show();
+                ((PlayGroup)getTargetFragment()).addVideoToLineup(adapter.getItem(position));
             }
         });
         return rootView;
