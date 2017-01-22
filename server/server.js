@@ -120,7 +120,7 @@ app.post('/user/myplaylist/:userID', function(req, res){
 
         result.playlist.push(res.body);
         res.writeHead(200, {'Content_Type' : 'application/json'});
-        res.write(JSON.stringify{Result : "OK"});
+        res.write(JSON.stringify({Result : "OK"}));
         res.end();
     })
 });
@@ -180,21 +180,5 @@ app.post('/group/new/', function(req, res) {
         res.end();
     });
 });
-
-//POST request for new playlist
-app.post('/playlist/:userID', function(req, res) {
-    console.log("[/playlist/:userID] Got request");
-
-    User.findOne({userID : req.paramsUserID}, function(err, result){
-        result.playlist.save(function(err){
-            if(err1) return res.send(500, {error:err1});
-
-            res.writeHead(200, {'Content-Type':'application/json'});
-            res.write(JSON.stringify({Result : "OK"}));
-            res.end();
-        }); 
-    });
-});
-
 
 app.listen(8080, function() {console.log("Listening on port #8080")});
