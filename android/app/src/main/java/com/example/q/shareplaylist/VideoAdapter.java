@@ -67,8 +67,8 @@ public class VideoAdapter extends BaseAdapter {
     }
 
     public void add(String url, String title, String uploader, String thumbnail, String playerID,
-                    String playerName, String duration, int like) {
-        videos.add(new VideoData(url, title, uploader, thumbnail, playerID, playerName, duration, like));
+                    String playerName, String startedAt, String duration, int like) {
+        videos.add(new VideoData(url, title, uploader, thumbnail, playerID, playerName, startedAt, duration, like));
         notifyDataSetChanged();
     }
 
@@ -86,6 +86,7 @@ class VideoData {
 
     private String playerID;
     private String playerName;
+    private String startedAt;
     private String duration;
     private int like;
 
@@ -96,13 +97,14 @@ class VideoData {
         this.thumbnail = thumbnail;
     }
 
-    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, String duration, Integer like) {
+    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, String startedAt, String duration, Integer like) {
         this.url = url;
         this.title = title;
         this.uploader = uploader;
         this.thumbnail = thumbnail;
         this.playerID = playerID;
         this.playerName = playerName;
+        this.startedAt = startedAt;
         this.duration = duration;
         this.like = like;
     }
@@ -155,6 +157,14 @@ class VideoData {
         this.playerName = playerName;
     }
 
+    public String getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(String startedAt) {
+        this.startedAt = startedAt;
+    }
+
     public String getDuration() {
         return duration;
     }
@@ -163,11 +173,11 @@ class VideoData {
         this.duration = duration;
     }
 
-    public Integer getLike() {
+    public int getLike() {
         return like;
     }
 
-    public void setLike(Integer like) {
+    public void setLike(int like) {
         this.like = like;
     }
 }

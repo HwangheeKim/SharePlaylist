@@ -39,8 +39,6 @@ public class PlayGroupLineup extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                // TODO : ONGOING, When item clicked, show options (add to my playlist / remove from lineup)
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("What?")
                         .setPositiveButton("Add to my playlist", new DialogInterface.OnClickListener() {
                             @Override
@@ -120,7 +118,8 @@ public class PlayGroupLineup extends Fragment {
                     }
                     adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
                             record.get("thumbnail").getAsString(), record.get("playerID").getAsString(),
-                            playerNameDecoded, record.get("duration").getAsString(), record.get("like").getAsInt());
+                            record.get("startedAt").getAsString(), playerNameDecoded,
+                            record.get("duration").getAsString(), record.get("like").getAsInt());
                 }
             }
         });
