@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
+var isoduration = require('iso8601-duration');
 
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -37,6 +38,7 @@ var userSchema = new Schema({
 });
 var User = mongoose.model('User', userSchema, 'User');
 
+var defaultDate = 10000000000000
 var groupSchema = new Schema({
     groupName : {type:String, required:true},
     creatorID : {type:String, required:true},
@@ -49,7 +51,7 @@ var groupSchema = new Schema({
                     thumbnail: {type:String},
                     playerID: {type:String},
                     playerName: {type:String},
-                    startedAt: {type:Date, default:8640000000000000},
+                    startedAt: {type:Date, default:defaultDate},
                     duration: {type:String},
                     like: {type:Number, default:0}}]
 });
@@ -189,14 +191,54 @@ app.post('/group/:groupID/removeLineup', function(req, res) {
 
 // GET request for next lineup
 app.get('/group/:groupID/nextLineup', function(req, res) {
-    // If somevideo is still playing, return that
-    // else, return next lineup & set startedAt to now
-    // if there isn't such video, return nothing
+    console.log("[/group/:groupID/nextLineup] Got request");
+
+    Group.findById(req.params.groupID, function(err, result) {
+        if (err) throw err;
+        
+        var lineup = result['videoLineup'];
+        for (var i=0 ; i<lineup.length ; i++) {
+            // If the video has already been finished, continue to next one
+            if (lineup[i].startedAt.valueOf() + duration(lineup[i].duration) < Date.now()) continue;
+
+            // If somevideo is still playing, return that
+            // If the video has not yet been played, return that & set startedAt to now
+            if (lineup[i].startedAt.valueOf() == defaultDate) {
+                console.log("\tnew video will be played " + lineup[i]._id);
+                Group.update({'videoLineup._id' : lineup[i]._id},
+                        {$set : {'videoLineup.$.startedAt' : Date.now()}}, function(err) {
+                    if (err) throw err;
+
+                    Group.findOne({_id:req.params.groupID, 'videoLineup._id':lineup[i]._id },
+                            {'videoLineup.$':1}, function(err1, result) {
+                        if (err1) throw err1;
+
+                        res.writeHead(200, {'Content-Type' : 'application/json'});
+                        res.write(JSON.stringify(result['videoLineup'][0]));
+                        res.end();
+                    });
+                });
+                return;
+            } else {
+                console.log("\tvideo has been played");
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify(lineup[i]));
+                res.end();
+                return;
+            }
+        }
     
-    Group.findOneById(req.params.groupID, function(err, result) {
-        // TODO : ONGOING, !!URGENT!!, get next lineup
+        // if there isn't such video, return nothing
+
+        res.writeHead(200, {'Content-Type' : 'application/json'});
+        res.write(JSON.stringify({}));
+        res.end();
     });
 });
+
+function duration(durationStr) {
+    return isoduration.toSeconds(isoduration.parse(durationStr)) * 1000; 
+}
 
 // POST request for new group
 app.post('/group/new/', function(req, res) {
