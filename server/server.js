@@ -134,4 +134,33 @@ app.get('/playlist/:userID', function(req, res) {
     });
 });
 
+//POST request for new playlist
+app.post('/playlist/:userID', function(req, res) {
+    console.log("[/playlist/:userID] Got request");
+    
+    var newVideoSchema = new videoSchema(req.body);
+    newVideoSchema.save(function(err1) {
+	if (err1) return res.send(500, {error: err1});
+	
+	res.writeHead(200, {'Content-Type' : 'application/json'});
+	res.write(JSON.stringify({Result : "OK}));
+	res.end();
+    });
+});
+
+//DELETE request for playlist
+app.delete('playlist/:userID', function(req, res) {
+    
+
+
+
+});
+
+
+
+
+
+
+
+
 app.listen(8080, function() {console.log("Listening on port #8080")});
