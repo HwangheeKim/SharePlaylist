@@ -102,7 +102,8 @@ app.post('/user/enroll', function(req, res) {
 app.get('/user/myplaylist/:userID', function(req,res){
     console.log("[user/:userID Got get request");
 
-    User.findOne({}, req.body, function(err, result){
+    User.findOne({userID:req.params.userID})
+        .exec(function(err,result){
         if(err) return res.send(500, {error:err});
 
         res.writeHead(200, {'Content_Type' : 'application/json'});
@@ -113,16 +114,17 @@ app.get('/user/myplaylist/:userID', function(req,res){
 
 // POST request from user
 app.post('/user/myplaylist/:userID', function(req, res){
-    console.log("[user/:userID Got post request");
+    console.log("[user/:userID] Got post request");
     
-    User.findOne({}, req.body, function(err, result){
-        if(err) return res.send(500, {error:err});
-
-        result.playlist.push(res.body);
-        res.writeHead(200, {'Content_Type' : 'application/json'});
-        res.write(JSON.stringify({Result : "OK"}));
-        res.end();
-    })
+    User.findOneAndUpdate({userID:req.params.userID}, 
+            {$push: {"playlist":req.body}},
+            {safe: true, upsert: true, new: true}, 
+            function(err, model) {
+                if(err) return res.send(500, {error:err});
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({Result: "OK"}));
+                res.end();
+            });
 });
 
 // GET request for all group information
