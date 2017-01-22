@@ -24,20 +24,6 @@ public class MyPlaylist extends Fragment {
 
 
 
-    public class loaderActivity extends Activity {
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.fragment_loader);
-
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_loader, new PlayGroupAddVideo(), "tag1");
-            fragmentTransaction.commit();
-
-        }
-    }
 
 
     @Override
@@ -46,6 +32,8 @@ public class MyPlaylist extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_my_playlist, container, false);
 
         ListView listview = (ListView) rootView.findViewById(R.id.myPlayListView);
+
+
 
 
 
