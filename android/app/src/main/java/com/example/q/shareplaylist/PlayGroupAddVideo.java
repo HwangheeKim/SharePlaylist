@@ -1,11 +1,13 @@
 package com.example.q.shareplaylist;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -49,7 +51,19 @@ public class PlayGroupAddVideo extends Fragment {
             @Override
             public void onClick(View v) {
                 // Load search result to the list
-                youtubeSearch();
+                if(editText.getText().toString().equals("")) {
+                    Snackbar.make(listView, "Enter the search keyword", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    youtubeSearch();
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO : Add selected video to the group's videoLineup
+                Snackbar.make(listView, "Video (" + adapter.getItem(position).getTitle() + ") will be added", Snackbar.LENGTH_SHORT).show();
             }
         });
         return rootView;
