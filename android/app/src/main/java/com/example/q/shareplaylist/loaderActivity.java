@@ -28,7 +28,7 @@ import java.net.URLEncoder;
  * Created by q on 2017-01-22.
  */
 
-public class LoaderActivity extends AppCompatActivity {
+public class loaderActivity extends AppCompatActivity {
 
     EditText editText;
     ListView listView;
