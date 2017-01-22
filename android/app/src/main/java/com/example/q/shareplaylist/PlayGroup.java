@@ -37,7 +37,7 @@ public class PlayGroup extends Fragment {
         lineup = new PlayGroupLineup();
         addVideo = new PlayGroupAddVideo();
 
-        // These two lines were problem but don't know why....
+        // These lines were problem but don't know why....
 //        player.setTargetFragment(this, MainActivity.PLAY_GROUP);
 //        lineup.setTargetFragment(this, MainActivity.PLAY_GROUP);
 //        addVideo.setTargetFragment(this, MainActivity.PLAY_GROUP);
@@ -67,8 +67,9 @@ public class PlayGroup extends Fragment {
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
     }
 
-    public void addVideoToLineup(VideoData videoData) {
-        lineup.addToLineup(videoData);
+    private VideoData nextLineup() {
+        // TODO : ONGOING, !!URGENT!!, get next lineup
+        return null;
     }
 
     @Override
