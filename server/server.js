@@ -42,7 +42,7 @@ var groupSchema = new Schema({
     creatorID : {type:String, required:true},
     creatorName : {type:String, required:true},
     
-    currentPlayingIndex : {type:Number, required:true, default:0},
+    //currentPlayingIndex : {type:Number, required:true, default:0},
     videoLineup : [{url : {type:String},
                     title: {type:String},
                     uploader: {type:String},
@@ -187,6 +187,17 @@ app.post('/group/:groupID/removeLineup', function(req, res) {
             });
 });
 
+// GET request for next lineup
+app.get('/group/:groupID/nextLineup', function(req, res) {
+    // If somevideo is still playing, return that
+    // else, return next lineup & set startedAt to now
+    // if there isn't such video, return nothing
+    
+    Group.findOneById(req.params.groupID, function(err, result) {
+        // TODO : ONGOING, !!URGENT!!, get next lineup
+    });
+});
+
 // POST request for new group
 app.post('/group/new/', function(req, res) {
     console.log("[group/new] Got request");
@@ -202,3 +213,4 @@ app.post('/group/new/', function(req, res) {
 });
 
 app.listen(8080, function() {console.log("Listening on port #8080")});
+
