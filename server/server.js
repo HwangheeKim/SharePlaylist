@@ -49,7 +49,7 @@ var groupSchema = new Schema({
                     thumbnail: {type:String},
                     playerID: {type:String},
                     playerName: {type:String},
-                    duration: {type:String},  // TODO : String? ISO 8601
+                    duration: {type:String},
                     like: {type:Number, default:0}}],
     startedAt : {type:Date, default:0},
 });
@@ -100,20 +100,6 @@ app.post('/user/enroll', function(req, res) {
     });
 });
 
-// GET request for playlist
-app.get('/user/myplaylist/:userID', function(req,res){
-    console.log("[user/:userID Got get request");
-
-    User.findOne({userID:req.params.userID})
-        .exec(function(err,result){
-        if(err) return res.send(500, {error:err});
-
-        res.writeHead(200, {'Content_Type' : 'application/json'});
-        res.write(JSON.stringify(result.playlist));
-        res.end();
-    });
-});
-
 // POST request from user
 app.post('/user/myplaylist/:userID', function(req, res){
     console.log("[user/:userID] Got post request");
@@ -128,6 +114,20 @@ app.post('/user/myplaylist/:userID', function(req, res){
                 res.end();
             });
 });
+
+// DELETE request from use
+app.post('/user/myplaylist/delete/:userID', function(req,res){
+    console.log("[user/:userID] got delete request");
+    User.findOneAndUpdate({userID:req.params.userID},
+            {$pull: {"playlist":{url: req.body['url']}}},
+            function(err, model){
+                if(err) return res.send(500, {error:err});
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({Result:"OK"}));
+                res.end();
+            });
+})
+
 
 // GET request for all group information
 app.get('/group/all', function(req, res) {
