@@ -56,7 +56,10 @@ public class VideoAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void clear() { videos.clear(); }
+    public void clear() {
+        videos.clear();
+        notifyDataSetChanged();
+    }
 
     public void add(String url, String title, String uploader, String thumbnail) {
         videos.add(new VideoData(url, title, uploader, thumbnail));

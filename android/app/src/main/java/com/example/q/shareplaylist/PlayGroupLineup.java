@@ -37,7 +37,7 @@ public class PlayGroupLineup extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO : When item clicked, show options (add to my playlist / remove from lineup)
+                // TODO : ONGOING, When item clicked, show options (add to my playlist / remove from lineup)
             }
         });
 
@@ -83,7 +83,6 @@ public class PlayGroupLineup extends Fragment {
                     json.addProperty("thumbnail", videoData.getThumbnail());
                     json.addProperty("playerID", MainActivity.userID);
                     json.addProperty("playerName", URLEncoder.encode(MainActivity.userName, "utf-8"));
-                    // TODO : ONGOING, Check whether this property works appropriately
                     json.addProperty("duration", result.get("items").getAsJsonArray().get(0).getAsJsonObject()
                                                     .get("contentDetails").getAsJsonObject()
                                                     .get("duration").getAsString());
