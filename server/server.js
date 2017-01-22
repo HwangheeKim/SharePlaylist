@@ -48,7 +48,7 @@ var groupSchema = new Schema({
                     uploader: {type:String},
                     thumbnail: {type:String},
                     player: {type:String},
-                    like: {type:Number}}],
+                    like: {type:Number, default:0}}],
     startedAt : {type:Date, default:0},
 });
 var Group = mongoose.model('Groups', groupSchema, 'Groups');
@@ -67,7 +67,20 @@ app.get('/user/all', function(req, res) {
         res.write(JSON.stringify(result));
         res.end();
     });
+});
 
+// GET request for specific user status
+app.get('/user/:userID', function(req, res) {
+    console.log("[/user/all] Got request");
+
+    User.findOne({userID:req.params.userID})
+        .exec(function(err, result) {
+        if (err) return res.send(500, {error: err});
+    
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.write(JSON.stringify(result));
+        res.end();
+    });
 });
 
 
@@ -80,7 +93,7 @@ app.post('/user/enroll', function(req, res) {
 
         console.log("DONE ENROLL NEW USER " + JSON.stringify(req.body));
         res.writeHead(200, {'Content-Type':'application/json'});
-        res.write(JSON.stringify({result: 'OK'}));
+        res.write(JSON.stringify(doc));
         res.end();
     });
 });
@@ -112,7 +125,6 @@ app.post('/user/myplaylist/:userID', function(req, res){
     })
 });
 
-
 // GET request for all group information
 app.get('/group/all', function(req, res) {
     console.log("[group/all] Got request");
@@ -124,6 +136,35 @@ app.get('/group/all', function(req, res) {
         res.write(JSON.stringify(result));
         res.end();
     });
+});
+
+// GET request for specific group
+app.get('/group/:groupID', function(req, res) {
+    console.log("[group/:groupID] Got request");
+
+    Group.findOne({_id:req.params.groupID}, function(err, result) {
+        if (err) return res.send(500, {error: err});
+
+        res.writeHead(200, {'Content-Type' : 'application/json'});
+        res.write(JSON.stringify(result));
+        res.end();
+    });
+});
+
+// POST request for add videoLineup to the group
+app.post('/group/:groupID/addLineup', function(req, res) {
+    console.log("[/group/:groupID/addLineup] Got request");
+
+    Group.findByIdAndUpdate(req.params.groupID,
+            {$push: {"videoLineup": req.body}},
+            {safe: true, upsert: true, new: true},
+            function(err, model) {
+                if (err) throw err;
+
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({Result : "OK"}));
+                res.end();
+            });
 });
 
 // POST request for new group
@@ -140,54 +181,20 @@ app.post('/group/new/', function(req, res) {
     });
 });
 
-// GET request for playlist for user with 'userID'
-app.get('/playlist/:userID', function(req, res) {
-    console.log("[/playlist/:userID] Got request");
-    User.findOne({userID : req.params.userID})
-        .populate('playlist')
-        .exec(function(err, result) {
-            if (err) return res.send(500, {error: err});
-
-            res.writeHead(200, {'Content-Type' : 'application/json'});
-            if(result.hasOwnProperty('playlist')) {
-                res.write(JSON.stringify(result['playlist']));
-            } else {
-                res.write(JSON.stringify([]));
-            }
-            res.end();
-    });
-});
-
 //POST request for new playlist
 app.post('/playlist/:userID', function(req, res) {
     console.log("[/playlist/:userID] Got request");
-    
-    User.findOne({userID : req.paramsUserID}, function(err, result)){
-       result.playlist.save(function(err){
+
+    User.findOne({userID : req.paramsUserID}, function(err, result){
+        result.playlist.save(function(err){
             if(err1) return res.send(500, {error:err1});
 
             res.writeHead(200, {'Content-Type':'application/json'});
             res.write(JSON.stringify({Result : "OK"}));
             res.end();
-       }); 
-    
+        }); 
     });
-
 });
-
-//DELETE request for playlist
-app.delete('playlist/:userID', function(req, res) {
-    
-
-
-
-});
-
-
-
-
-
-
 
 
 app.listen(8080, function() {console.log("Listening on port #8080")});
