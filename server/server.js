@@ -47,7 +47,9 @@ var groupSchema = new Schema({
                     title: {type:String},
                     uploader: {type:String},
                     thumbnail: {type:String},
-                    player: {type:String},
+                    playerID: {type:String},
+                    playerName: {type:String},
+                    duration: {type:String},
                     like: {type:Number, default:0}}],
     startedAt : {type:Date, default:0},
 });
