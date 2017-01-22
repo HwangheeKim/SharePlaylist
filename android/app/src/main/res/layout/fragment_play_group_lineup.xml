@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.q.shareplaylist.PlayGroupHistory">
+    tools:context="com.example.q.shareplaylist.PlayGroupLineup">
 
-    <TextView
+    <ListView
+        android:id="@+id/playgroup_lineup_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="playgroup_history" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

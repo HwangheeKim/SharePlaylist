@@ -4,11 +4,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +19,9 @@ public class PlayGroup extends Fragment {
     private View rootView;
     private ViewPager viewPager;
     private PlayGroupPager pagerAdapter;
+    PlayGroupPlayer player;
+    PlayGroupLineup lineup;
+    PlayGroupAddVideo addVideo;
 
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
@@ -31,9 +31,16 @@ public class PlayGroup extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_play_group, container, false);
-
         viewPager = (ViewPager)rootView.findViewById(R.id.playgroup_pager);
-        pagerAdapter = new PlayGroupPager(getActivity().getSupportFragmentManager());
+
+        player = new PlayGroupPlayer();
+        player.setTargetFragment(this, MainActivity.PLAY_GROUP);
+        lineup = new PlayGroupLineup();
+        lineup.setTargetFragment(this, MainActivity.PLAY_GROUP);
+        addVideo = new PlayGroupAddVideo();
+        addVideo.setTargetFragment(this, MainActivity.PLAY_GROUP);
+        pagerAdapter = new PlayGroupPager(getActivity().getSupportFragmentManager(),
+                                          player, lineup, addVideo);
         viewPager.setAdapter(pagerAdapter);
 
         initYouTube();
@@ -57,6 +64,10 @@ public class PlayGroup extends Fragment {
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
     }
 
+    public void addVideoToLineup(VideoData videoData) {
+        lineup.addToLineup(videoData);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -74,14 +85,21 @@ public class PlayGroup extends Fragment {
 
 class PlayGroupPager extends FragmentStatePagerAdapter {
     PlayGroupPlayer player;
-    PlayGroupHistory history;
+    PlayGroupLineup history;
     PlayGroupAddVideo addVideo;
 
     public PlayGroupPager(FragmentManager fm) {
         super(fm);
         player = new PlayGroupPlayer();
-        history = new PlayGroupHistory();
+        history = new PlayGroupLineup();
         addVideo = new PlayGroupAddVideo();
+    }
+
+    public PlayGroupPager(FragmentManager fm, PlayGroupPlayer player, PlayGroupLineup history, PlayGroupAddVideo addVideo) {
+        super(fm);
+        this.player = player;
+        this.history = history;
+        this.addVideo = addVideo;
     }
 
     @Override
