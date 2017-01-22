@@ -1,18 +1,11 @@
 package com.example.q.shareplaylist;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +19,6 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MyPlaylist extends Fragment {
     static final int RESULT_OK = 1;
@@ -56,7 +47,6 @@ public class MyPlaylist extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("delete?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         String url=adapter.getItem(pos).getUrl();
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("url", url);
@@ -73,24 +63,16 @@ public class MyPlaylist extends Fragment {
                     }
                 });
                 builder.create().show();
-
-
             }
         });
 
-
         loadFromServer();
 
-
-
-
-
         fab = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent searchIntent = new Intent(getActivity(), loaderActivity.class);
+                Intent searchIntent = new Intent(getContext(), loaderActivity.class);
                 getActivity().startActivityForResult(searchIntent, MainActivity.SELECT_UPLOAD);
             }
         });

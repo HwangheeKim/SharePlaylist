@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private MyPlaylist myPlaylist;
     private MyProfile myProfile;
     private PlayGroup playGroup;
+    private int menuNumber = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +89,20 @@ public class MainActivity extends AppCompatActivity
                     Snackbar.make(findViewById(R.id.main_container), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_container, myProfile).commit();
+                    menuNumber = 0;
                 }
                 break;
             case R.id.drawer_findgroup:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
+                menuNumber = 1;
                 break;
             case R.id.drawer_playgroup:
                 if(currentGroup.equals("")) {
                     Snackbar.make(findViewById(R.id.main_container), "You have to join the group!", Snackbar.LENGTH_SHORT).show();
-                } else {
+                } else if (menuNumber != 2){
                     playGroup = new PlayGroup();
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
+                    menuNumber = 2;
                 }
                 break;
             case R.id.drawer_myplaylist:
@@ -106,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                     Snackbar.make(findViewById(R.id.main_container), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_container, myPlaylist).commit();
+                    menuNumber = 3;
                 }
                 break;
             case R.id.drawer_login:
@@ -133,21 +138,16 @@ public class MainActivity extends AppCompatActivity
             updateMyProfile(true);
         } else if (requestCode == GROUP_SELECTED) {
             playGroup = new PlayGroup();
+            menuNumber=2;
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
-        }
-
-
-
-        else if(requestCode == SELECT_UPLOAD){
+        } else if(requestCode == SELECT_UPLOAD){
             String[] str=data.getStringArrayExtra("video");
-
             try{
                 myPlaylist.adapter.add(str[0], URLDecoder.decode(str[1],"utf-8"), URLDecoder.decode(str[2], "utf-8"), str[3]);
                 myPlaylist.adapter.notifyDataSetChanged();
             }catch(Exception e){e.printStackTrace();}
 
             Snackbar.make(myPlaylist.listView, "Video (" + str[1] + ") will be added", Snackbar.LENGTH_SHORT).show();
-
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,6 +220,14 @@ public class MainActivity extends AppCompatActivity
                         findViewById(R.id.drawer_avatar_frame).setVisibility(View.VISIBLE);
                     }
                 });
+    }
+
+    public void notifyMyplaylistAdded() {
+        playGroup.addVideo.loadPlaylist();
+    }
+
+    public void addVideoToLineup(VideoData videoData) {
+        playGroup.lineup.addToLineup(videoData);
     }
 
     @Override
