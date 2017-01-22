@@ -95,7 +95,11 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
                 break;
             case R.id.drawer_myplaylist:
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, myPlaylist).commit();
+                if(userID.equals("")) {
+                    Snackbar.make(findViewById(R.id.main_container), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_container, myPlaylist).commit();
+                }
                 break;
             case R.id.drawer_login:
                 if(isLoggedIn()) {
