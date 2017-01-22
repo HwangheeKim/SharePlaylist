@@ -30,7 +30,10 @@ var userSchema = new Schema({
     userName : {type:String, required:true},
     picture : {type:String, default:"http://www.ogubin.com/images/empty_profile2.png"},
     current : {type:Schema.Types.ObjectId, ref:'Group'},
-    playlist : [{type:Schema.Types.ObjectId, ref:'Video'}]
+    playlist : [{url : {type:String},
+                 title: {type:String},
+                 uploader: {type:String},
+                 thumbnail: {type:String}}]
 });
 var User = mongoose.model('User', userSchema, 'User');
 
@@ -40,22 +43,15 @@ var groupSchema = new Schema({
     creatorName : {type:String, required:true},
     
     currentPlayingIndex : {type:Number, required:true, default:0},
-    currentPlyingVideo : [{type:Schema.Types.ObjectId, ref:'Video'}],
-    currentPlayer : [{type:String}],
+    videoLineup : [{url : {type:String},
+                    title: {type:String},
+                    uploader: {type:String},
+                    thumbnail: {type:String},
+                    player: {type:String},
+                    like: {type:Number}}],
     startedAt : {type:Date, default:0},
-
-    like : {type:Number, default:0}
 });
 var Group = mongoose.model('Groups', groupSchema, 'Groups');
-
-var videoSchema = new Schema({
-    url : {type:String, required:true},
-    title : {type:String, required:true},
-    uploader : {type:String},
-    thumbnail : {type:String}
-});
-var Video = mongoose.model('Video', videoSchema, 'Video');
-
 
 
 ////////*    Server Implementation    *////////
@@ -133,5 +129,34 @@ app.get('/playlist/:userID', function(req, res) {
             res.end();
     });
 });
+
+//POST request for new playlist
+app.post('/playlist/:userID', function(req, res) {
+    console.log("[/playlist/:userID] Got request");
+    
+    var newVideoSchema = new videoSchema(req.body);
+    newVideoSchema.save(function(err1) {
+	if (err1) return res.send(500, {error: err1});
+	
+	res.writeHead(200, {'Content-Type' : 'application/json'});
+	res.write(JSON.stringify({Result : "OK}));
+	res.end();
+    });
+});
+
+//DELETE request for playlist
+app.delete('playlist/:userID', function(req, res) {
+    
+
+
+
+});
+
+
+
+
+
+
+
 
 app.listen(8080, function() {console.log("Listening on port #8080")});
