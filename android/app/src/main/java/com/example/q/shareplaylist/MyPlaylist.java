@@ -1,7 +1,9 @@
 package com.example.q.shareplaylist;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.JsonArray;
@@ -42,26 +45,40 @@ public class MyPlaylist extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_my_playlist, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.myPlayListView);
+
         adapter = new VideoAdapter();
         listView.setAdapter(adapter);
 
-        // Load Playlist From Server
-        Ion.with(this).load(MainActivity.serverURL+"/user/" + MainActivity.userID)
-                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onCompleted(Exception e, JsonObject result) {
-                adapter.clear();
-                JsonArray items = result.get("playlist").getAsJsonArray();
-                for(int i=0 ; i<items.size() ; i++) {
-                    JsonObject item = items.get(i).getAsJsonObject();
-                    try{adapter.add(item.get("url").getAsString(),
-                            URLDecoder.decode(item.get("title").getAsString(), "utf-8"),
-                            URLDecoder.decode(item.get("uploader").getAsString(), "utf-8"),
-                            item.get("thumbnail").getAsString());}catch(Exception d){d.printStackTrace();}
-                }
-                Log.d("Load user's playlist", result.toString());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos=position;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("delete?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String url=adapter.getItem(pos).getUrl();
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("url", url);
+                        Ion.with(getContext()).load(MainActivity.serverURL+"/user/myplaylist/delete/"+MainActivity.userID).setJsonObjectBody(jsonObject)
+                                .asJsonObject().setCallback(new FutureCallback<JsonObject>(){
+
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                adapter.clear();
+                                loadFromServer();
+                            }
+                        });
+                    }
+                });
+                builder.create().show();
+
+
             }
         });
+
+
+        loadFromServer();
 
 
 
@@ -80,7 +97,25 @@ public class MyPlaylist extends Fragment {
         return rootView;
     }
 
-
+    private void loadFromServer(){
+        // Load Playlist From Server
+        Ion.with(this).load(MainActivity.serverURL+"/user/" + MainActivity.userID)
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                adapter.clear();
+                JsonArray items = result.get("playlist").getAsJsonArray();
+                for(int i=0 ; i<items.size() ; i++) {
+                    JsonObject item = items.get(i).getAsJsonObject();
+                    try{adapter.add(item.get("url").getAsString(),
+                            URLDecoder.decode(item.get("title").getAsString(), "utf-8"),
+                            URLDecoder.decode(item.get("uploader").getAsString(), "utf-8"),
+                            item.get("thumbnail").getAsString());}catch(Exception d){d.printStackTrace();}
+                }
+                Log.d("Load user's playlist", result.toString());
+            }
+        });
+    }
 
 
 
