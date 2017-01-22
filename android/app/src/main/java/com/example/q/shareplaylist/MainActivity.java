@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     static String userID = "";
     static String userName = "";
     static String currentGroup = "";
+    static String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
 
     private DrawerLayout drawer;
     private FindGroup findGroup;

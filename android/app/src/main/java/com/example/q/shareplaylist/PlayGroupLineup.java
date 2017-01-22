@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.JsonArray;
@@ -32,6 +33,13 @@ public class PlayGroupLineup extends Fragment {
         listView.setAdapter(adapter);
 
         loadFromServer();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO : When item clicked, show options (add to my playlist / remove from lineup)
+            }
+        });
 
         return rootView;
     }
@@ -62,26 +70,38 @@ public class PlayGroupLineup extends Fragment {
     }
 
     public void addToLineup(final VideoData videoData) {
-        JsonObject json = new JsonObject();
+        String url = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id="+ videoData.getUrl() + "&key=" + MainActivity.youtubeKey;
+        Ion.with(getContext()).load(url).asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                JsonObject json = new JsonObject();
 
-        try {
-            json.addProperty("url", videoData.getUrl());
-            json.addProperty("title", URLEncoder.encode(videoData.getTitle(), "utf-8"));
-            json.addProperty("uploader", URLEncoder.encode(videoData.getUploader(), "utf-8"));
-            json.addProperty("thumbnail", videoData.getThumbnail());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                try {
+                    json.addProperty("url", videoData.getUrl());
+                    json.addProperty("title", URLEncoder.encode(videoData.getTitle(), "utf-8"));
+                    json.addProperty("uploader", URLEncoder.encode(videoData.getUploader(), "utf-8"));
+                    json.addProperty("thumbnail", videoData.getThumbnail());
+                    json.addProperty("playerID", MainActivity.userID);
+                    json.addProperty("playerName", URLEncoder.encode(MainActivity.userName, "utf-8"));
+                    // TODO : ONGOING, Check whether this property works appropriately
+                    json.addProperty("duration", result.get("items").getAsJsonArray().get(0).getAsJsonObject()
+                                                    .get("contentDetails").getAsJsonObject()
+                                                    .get("duration").getAsString());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
 
-        Ion.with(getContext()).load(MainActivity.serverURL+"/group/" + MainActivity.currentGroup + "/addLineup")
-                .setJsonObjectBody(json).asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-//                        adapter.add(videoData);
-                        loadFromServer();
-                    }
-                });
+                Ion.with(getContext()).load(MainActivity.serverURL+"/group/" + MainActivity.currentGroup + "/addLineup")
+                        .setJsonObjectBody(json).asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                loadFromServer();
+                            }
+                        });
+            }
+        });
+
 
         // TODO : Notify other users (data set changed through Firebase)
     }

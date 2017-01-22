@@ -24,7 +24,6 @@ public class PlayGroupAddVideo extends Fragment {
     EditText editText;
     ListView listView;
     VideoAdapter adapter;
-    String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,7 +88,7 @@ public class PlayGroupAddVideo extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q="+keyword+"&type=video&videoDefinition=any&maxResults=20&key=" + youtubeKey;
+        String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q="+keyword+"&type=video&videoDefinition=any&maxResults=20&key=" + MainActivity.youtubeKey;
 
         Ion.with(getContext()).load(url).asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

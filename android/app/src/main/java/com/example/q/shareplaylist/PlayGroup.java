@@ -53,7 +53,8 @@ public class PlayGroup extends Fragment {
         onInitializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(testvideo, 0);
+                youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+                youTubePlayer.loadVideo(testvideo, 10000);
             }
 
             @Override
