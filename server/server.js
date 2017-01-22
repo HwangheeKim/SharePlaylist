@@ -49,9 +49,9 @@ var groupSchema = new Schema({
                     thumbnail: {type:String},
                     playerID: {type:String},
                     playerName: {type:String},
+                    startedAt: {type:Date, default:8640000000000000},
                     duration: {type:String},
-                    like: {type:Number, default:0}}],
-    startedAt : {type:Date, default:0},
+                    like: {type:Number, default:0}}]
 });
 var Group = mongoose.model('Groups', groupSchema, 'Groups');
 
