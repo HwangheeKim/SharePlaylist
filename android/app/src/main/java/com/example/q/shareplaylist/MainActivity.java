@@ -243,6 +243,10 @@ public class MainActivity extends AppCompatActivity
         return playGroup.isVideoLoaded();
     }
 
+    public void playNextLineup(){
+        playGroup.playNextLineup();
+    }
+
     private void tt(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();}
 }
