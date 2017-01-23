@@ -61,8 +61,13 @@ public class VideoAdapter extends BaseAdapter {
 
         if(currentPlayingVideo_id.length()>0 && videos.get(position).get_id().equals(currentPlayingVideo_id)) {
             convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0x33111188);
+            convertView.findViewById(R.id.item_video_overlay).setVisibility(View.GONE);
+        } else if(videos.get(position).hasStartedAt() && videos.get(position).getStartedAt() < 10000000000000L) {
+            convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0xffffff);
+            convertView.findViewById(R.id.item_video_overlay).setVisibility(View.VISIBLE);
         } else {
             convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0xffffff);
+            convertView.findViewById(R.id.item_video_overlay).setVisibility(View.GONE);
         }
 
         return convertView;
@@ -215,6 +220,8 @@ class VideoData {
     public void setStartedAt(Long startedAt) {
         this.startedAt = startedAt;
     }
+
+    public boolean hasStartedAt() { return this.startedAt!=null; }
 
     public Long getDuration() {
         return duration;
