@@ -29,6 +29,9 @@
         android:gravity="center"
         android:textSize="35dp"
         android:id="@+id/myPlayList"
-        android:text="My Playlist"/>
+        android:text="My Playlist"
+        android:paddingTop="15dp"
+        android:paddingBottom="20dp"
+        android:background="#98D9FF"/>
 
 </FrameLayout>

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -43,6 +44,11 @@ public class MyProfile extends Fragment {
         imageView= (ImageView) view.findViewById(R.id.profile_image);
         new LongOperation().execute();
 
+
+        ((TextView)view.findViewById(R.id.name)).setText(MainActivity.userName);
+        ((TextView)view.findViewById(R.id.gender)).setText(MainActivity.userGender);
+        ((TextView)view.findViewById(R.id.birthday)).setText(MainActivity.userBirthday);
+        ((TextView)view.findViewById(R.id.age)).setText(MainActivity.userAge_range);
 
 
 

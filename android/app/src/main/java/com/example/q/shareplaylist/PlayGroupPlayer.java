@@ -18,24 +18,35 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
+
+import java.net.URLDecoder;
 
 public class PlayGroupPlayer extends Fragment {
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
-    private String video="ePpPVE-GGJw";
     private int initTime;
 
     private View view;
+    private TextView uploader;
+    private TextView player;
+    private TextView title;
+
+    private JsonObject result;
+    private boolean playing = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_play_group_player, container, false);
-
+        uploader=(TextView)view.findViewById(R.id.uploader);
+        title= (TextView)view.findViewById(R.id.title);
+        player=(TextView)view.findViewById(R.id.player);
         setTypeface();
+        setPlayingInfo();
 
         return view;
     }
@@ -48,72 +59,28 @@ public class PlayGroupPlayer extends Fragment {
         played.setTypeface(myTypeface);
     }
 
-
-/*
-    private void initYouTube(){
-        youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.fragment3);
-        //youTubePlayerView = (YouTubePlayerView) view.findViewById(R.id.view);
-
-        onInitializedListener = new YouTubePlayer.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(video, initTime);
-                //youTubePlayer.loadVideo(videos, startIndex, initTime);
-                youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
-                    @Override
-                    public void onLoading() {
-
-                    }
-
-                    @Override
-                    public void onLoaded(String s) {
-
-                    }
-
-                    @Override
-                    public void onAdStarted() {
-
-                    }
-
-                    @Override
-                    public void onVideoStarted() {
-
-                    }
-
-                    @Override
-                    public void onVideoEnded() {
-
-                    }
-
-                    @Override
-                    public void onError(YouTubePlayer.ErrorReason errorReason) {
-                        Log.e("error", errorReason.toString());
-                    }
-                });
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        };
-
-        youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
-
-
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment2, youTubePlayerFragment);
-        fragmentTransaction.commit();
+    public void setPlayingInfoJson(JsonObject result, boolean setplaying){
+        this.result=result;
+        playing=setplaying;
+        setPlayingInfo();
     }
 
-    @Override
-    public void onDestroyView(){
-        FragmentManager fragmentManager = getActivity().getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.remove(youTubePlayerFragment);
-        fragmentTransaction.commit();
-        super.onDestroyView();
+    public void setPlayingInfo(){
+        if(result==null)
+            return;
+        try {
+            if(playing) {
+                title.setText(URLDecoder.decode(result.get("title").getAsString(), "utf-8"));
+                uploader.setText(URLDecoder.decode(result.get("uploader").getAsString(), "utf-8"));
+                player.setText(URLDecoder.decode(result.get("playerName").getAsString(), "utf-8"));
+            }
+            else{
+                title.setText("");
+                uploader.setText("");
+                player.setText("");
+            }
+        }catch(Exception e){e.printStackTrace();}
     }
-*/
+
+
 }

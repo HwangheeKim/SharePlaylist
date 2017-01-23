@@ -5,8 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
  */
 
 public class GroupAdapter extends BaseAdapter {
+    private int colors[] = {0xff372049, 0xff5d4970, 0xfff1baf3, 0xfffaeeff, 0x59535e};
     ArrayList<GroupData> groupDatas;
 
     public GroupAdapter() {
@@ -38,7 +43,7 @@ public class GroupAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(convertView==null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_group, parent, false);
@@ -51,7 +56,15 @@ public class GroupAdapter extends BaseAdapter {
         ((TextView)convertView.findViewById(R.id.item_group_status))
                 .setText(Integer.toString(groupDatas.get(position).getStatus()));
 
-        // TODO : Set Thumbnail
+        if(!groupDatas.get(position).getThumbnail().equals("")) {
+            Picasso.with(convertView.getContext()).load(groupDatas.get(position).getThumbnail())
+                    .into((ImageView)convertView.findViewById(R.id.item_group_bg));
+            convertView.findViewById(R.id.item_group_overlay).setBackgroundColor(0x66000000);
+        } else {
+            convertView.findViewById(R.id.item_group_overlay).setBackgroundColor(colors[position%colors.length]);
+        }
+
+        ((TextView)convertView.findViewById(R.id.item_group_status)).setText("" + groupDatas.get(position).getStatus());
 
         return convertView;
     }

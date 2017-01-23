@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="5dp">
 
+    <!-- TODO : Add duration information -->
     <ImageView
         android:id="@+id/item_video_thumbnail"
         android:layout_width="140dp"

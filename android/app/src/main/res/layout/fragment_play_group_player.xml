@@ -5,25 +5,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.q.shareplaylist.PlayGroupPlayer">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginTop="45dp" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/textView4"
-        android:layout_alignLeft="@+id/textView4"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_marginTop="25dp" />
+
 
     <TextView
         android:text="played by"
@@ -69,25 +52,34 @@
         android:layout_toLeftOf="@+id/imageButton"
         android:layout_toStartOf="@+id/imageButton" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/star_big_off"
-        android:layout_alignBottom="@+id/imageButton2"
-        android:layout_alignRight="@+id/textView5"
-        android:layout_alignEnd="@+id/textView5"
-        android:id="@+id/imageButton3" />
-
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:layout_marginLeft="31dp"
         android:layout_marginStart="31dp"
         android:layout_marginTop="22dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/player"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignLeft="@+id/uploader"
+        android:layout_alignStart="@+id/uploader" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uploader"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp" />
 
 </RelativeLayout>

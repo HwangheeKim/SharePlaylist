@@ -101,8 +101,10 @@ public class PlayGroup extends Fragment {
             public void onCompleted(Exception e, JsonObject result) {
                 if(!result.has("_id")) {
                     isLoaded = false;
+                    player.setPlayingInfoJson(new JsonObject(), false);
                 } else {
                     isLoaded = true;
+                    player.setPlayingInfoJson(result, true);
                     loadYouTube(result.get("url").getAsString(),
                             (int)(System.currentTimeMillis() - result.get("startedAt").getAsLong()));
                     lineup.adapter.setCurrentPlayingVideo_id(result.get("_id").getAsString());

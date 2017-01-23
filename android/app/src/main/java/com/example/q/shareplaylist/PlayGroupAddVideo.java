@@ -95,7 +95,7 @@ public class PlayGroupAddVideo extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q="+keyword+"&type=video&videoDefinition=any&maxResults=20&key=" + MainActivity.youtubeKey;
+        String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q="+keyword+"&type=video&videoDefinition=any&maxResults=40&key=" + MainActivity.youtubeKey;
 
         Ion.with(getContext()).load(url).asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
