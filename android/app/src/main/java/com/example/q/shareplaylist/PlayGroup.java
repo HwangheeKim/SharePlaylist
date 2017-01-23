@@ -1,5 +1,6 @@
 package com.example.q.shareplaylist;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,13 +51,38 @@ public class PlayGroup extends Fragment {
         return rootView;
     }
 
+
+   /* public class TimerCallBack extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try{
+                Thread.sleep(1000*60*4);
+            }catch(Exception e){e.printStackTrace();}
+            return null;
+        }
+
+        public void onPostRequest(String r){
+
+
+
+        }
+
+    }*/
+
+
+
+
     private void initYouTube(){
         youTubePlayerFragment = (YouTubePlayerFragment) getActivity().getFragmentManager().findFragmentById(R.id.playgroup_youtube);
         onInitializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
-                youTubePlayer.loadVideo(testvideo, 10000);
+
+                youTubePlayer.loadVideo(testvideo, 10*1000);
+                //
+                //  youTubePlayer.setPlayerStateChangeListener();
             }
 
             @Override
