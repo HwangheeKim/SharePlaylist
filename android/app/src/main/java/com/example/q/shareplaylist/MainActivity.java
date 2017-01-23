@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity
     static String serverURL = "http://52.78.101.202:8080";
     static String userID = "";
     static String userName = "";
+    static String userGender = "";
+    static String userBirthday = "";
+    static String userAge_range = "";
     static String currentGroup = "";
     static String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
 
@@ -168,6 +171,9 @@ public class MainActivity extends AppCompatActivity
                         try {
                             userID = response.getJSONObject().getString("id");
                             userName = URLDecoder.decode(response.getJSONObject().getString("name"), "utf-8");
+                            userGender = response.getJSONObject().getString("gender");
+                            userAge_range=response.getJSONObject().getJSONObject("age_range").getString("min");
+                            userBirthday = response.getJSONObject().getString("birthday");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity
                 }
         );
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id, name, email, gender, picture");
+        parameters.putString("fields", "id, name, email, gender, picture, birthday, age_range");
         request.setParameters(parameters);
         request.executeAsync();
     }

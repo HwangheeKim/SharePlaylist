@@ -93,6 +93,8 @@ public class PlayGroup extends Fragment {
     private void loadYouTube(String url_id , int millis) {
         if(millis < 0) millis = 0;
         mYouTubePlayer.loadVideo(url_id, millis);
+        lineup.adapter.setNowPlayingURL(url_id);
+
     }
 
     public void playNextLineup() {
@@ -102,6 +104,7 @@ public class PlayGroup extends Fragment {
             public void onCompleted(Exception e, JsonObject result) {
                 if(!result.has("_id")) {
                     isLoaded = false;
+                    lineup.adapter.setNowPlayingURL("");
                 } else {
                     isLoaded = true;
                     loadYouTube(result.get("url").getAsString(),

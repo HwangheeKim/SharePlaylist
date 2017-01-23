@@ -1,6 +1,7 @@
 package com.example.q.shareplaylist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 
 public class VideoAdapter extends BaseAdapter {
     ArrayList<VideoData> videos;
+    private String nowPlayingURL= "";
+
 
     public VideoAdapter() {
         videos = new ArrayList<>();
@@ -53,11 +56,19 @@ public class VideoAdapter extends BaseAdapter {
         ((TextView)convertView.findViewById(R.id.item_video_uploader))
                 .setText(videos.get(position).getUploader());
 
+        if(videos.get(position).getUrl().equals(nowPlayingURL))
+            convertView.setBackgroundColor(Color.BLUE);
+
         return convertView;
     }
 
     public void clear() {
         videos.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setNowPlayingURL(String url){
+        nowPlayingURL= url;
         notifyDataSetChanged();
     }
 
