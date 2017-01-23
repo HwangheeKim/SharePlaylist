@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 
 public class PlayGroup extends Fragment {
@@ -28,6 +31,7 @@ public class PlayGroup extends Fragment {
     private YouTubePlayer mYouTubePlayer;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
     private String testvideo="ePpPVE-GGJw";
+    private boolean isLoaded = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,21 +93,28 @@ public class PlayGroup extends Fragment {
         mYouTubePlayer.loadVideo("", 0);
     }
 
-    private void playNextLineup() {
+    public void playNextLineup() {
         // TODO : ONGOING, Server nextLineup query
         // TODO : If the response is not empty, call loadYouTube()
         // TODO : else, stop the video.
+        Ion.with(getContext()).load(MainActivity.serverURL+"/group/"+MainActivity.currentGroup+"/nextLineup")
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                if(!result.has("_id")) {
+                    // TODO : stop the video
+                    isLoaded = false;
+
+                } else {
+                    isLoaded = true;
+                }
+            }
+        });
     }
 
-    // TODO : ONGOING, Implement this
     public boolean isVideoLoaded() {
-        return false;
+        return isLoaded;
     }
-
-    // TODO : ONGOING, set (timerCallback / youtubeVideoEndCallback), get nextLineup
-    // TODO : load video from server
-    // public void ?? () {}
-
 }
 
 class PlayGroupPager extends FragmentStatePagerAdapter {

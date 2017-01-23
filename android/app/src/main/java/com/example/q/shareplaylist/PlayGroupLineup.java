@@ -164,7 +164,6 @@ public class PlayGroupLineup extends Fragment {
         // TODO : Notify other users (data set changed through Firebase)
     }
 
-    // TODO : ONGOING, IMplement these two functions
     private boolean isVideoLoaded() {
         return ((MainActivity)getActivity()).isVideoLoaded();
     }
