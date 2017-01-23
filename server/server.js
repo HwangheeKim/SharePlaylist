@@ -3,6 +3,12 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
 var isoduration = require('iso8601-duration');
+var http = require('http');
+var https = require('https');
+
+var FCM = require('fcm-push');
+var serverKey = 'AAAAzPr7jRE:APA91bEvQUWMB2zkRlGLkLH98eFRGuxT8faGyZucAgopCj2nnRjIAILb79zJKjPILB-84x1vkGSkxeyK4dNIXkcZJEMqDx4AF-RYLuMMr55wp_eAZ358K2X5OzmnQVwoz8uysvKpC3OK'
+var fcm = new FCM(serverKey);
 
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -29,6 +35,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
     userID : {type:String, required:true},
     userName : {type:String, required:true},
+    userToken : {type:String},
     picture : {type:String, default:"http://www.ogubin.com/images/empty_profile2.png"},
     current : {type:Schema.Types.ObjectId, ref:'Group'},
     playlist : [{url : {type:String},
@@ -168,6 +175,7 @@ app.post('/group/:groupID/addLineup', function(req, res) {
             {safe: true, upsert: true, new: true},
             function(err, model) {
                 if (err) throw err;
+                notifyLineupChanged(req.params.groupID);
 
                 res.writeHead(200, {'Content-Type' : 'application/json'});
                 res.write(JSON.stringify({Result : "OK"}));
@@ -184,12 +192,35 @@ app.post('/group/:groupID/removeLineup', function(req, res) {
             {$pull: {"videoLineup": {_id: req.body['_id'], url: req.body['url'], playerID: req.body['playerID']}}},
             function(err, model) {
                 if (err) throw err;
+                notifyLineupChanged(req.params.groupID);
 
                 res.writeHead(200, {'Content-Type' : 'application/json'});
                 res.write(JSON.stringify({Result : "OK"}));
                 res.end();
             });
 });
+
+function notifyLineupChanged(groupID) {
+    User.find({current:groupID}, function(err, result) {
+        if (err) throw err;
+        
+        for (var i=0 ; i<result.length ; i++) {
+            var message = {
+                to: result[i]['userToken'],
+                priority: "high",
+                notification: {
+                    title: "Lineup Changed",
+                    body: "Lineup has been changed"
+                }
+            };
+
+            fcm.send(message, function(err1, res) {
+                if (err1) throw err1;
+                console.log("Successfully sent with response: ", res);
+            })
+        }
+    });
+}
 
 // GET request for next lineup
 app.get('/group/:groupID/nextLineup', function(req, res) {
@@ -235,6 +266,39 @@ app.get('/group/:groupID/nextLineup', function(req, res) {
         res.writeHead(200, {'Content-Type' : 'application/json'});
         res.write(JSON.stringify({}));
         res.end();
+    });
+});
+
+// GET request for group information for list adapter
+app.get('/group/info/:groupID', function(req, res) {
+    console.log("[/group/info/:groupID] Got request");
+
+    User.count({current:req.params.groupID}, function(errCount, count) {
+        if (errCount) throw errCount;
+
+        Group.findById(req.params.groupID, function(err, result) {
+            if (err) throw err;
+
+            var lineup = result['videoLineup'];
+            for (var i=0 ; i<lineup.length ; i++) {
+                // If the video has already been finished, continue to next one
+                if (lineup[i].startedAt.valueOf() + lineup[i].duration < Date.now()) continue;
+
+                // If somevideo is still playing, return that
+                // If the video has not yet been played, return that & set startedAt to now
+                res.writeHead(200, {'Content-Type' : 'application/json'});
+                res.write(JSON.stringify({thumbnail : lineup[i]['thumbnail'],
+                                          count : count}));
+                res.end();
+                return;
+            }
+
+            // if there isn't such video, return nothing
+
+            res.writeHead(200, {'Content-Type' : 'application/json'});
+            res.write(JSON.stringify({count : count}));
+            res.end();
+        });
     });
 });
 
