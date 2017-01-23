@@ -24,6 +24,7 @@ public class PlayGroup extends Fragment {
     PlayGroupAddVideo addVideo;
 
     private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayer mYouTubePlayer;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
     private String testvideo="ePpPVE-GGJw";
 
@@ -46,6 +47,7 @@ public class PlayGroup extends Fragment {
         viewPager.setAdapter(pagerAdapter);
 
         initYouTube();
+        playNextLineup();
 
         return rootView;
     }
@@ -56,7 +58,7 @@ public class PlayGroup extends Fragment {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
-                youTubePlayer.loadVideo(testvideo, 10000);
+                mYouTubePlayer = youTubePlayer;
             }
 
             @Override
@@ -65,12 +67,7 @@ public class PlayGroup extends Fragment {
             }
         };
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
-    }
-
-    private VideoData nextLineup() {
-        // TODO : ONGOING, !!URGENT!!, get next lineup
-        return null;
-    }
+}
 
     @Override
     public void onDestroyView() {
@@ -85,6 +82,27 @@ public class PlayGroup extends Fragment {
         fragmentTransaction.remove(youTubePlayerFragment);
         fragmentTransaction.commitAllowingStateLoss();
     }
+
+    // TODO : ONGOING, implement load video function
+    private void loadYouTube(/* URL? , from when?*/) {
+        mYouTubePlayer.loadVideo("", 0);
+    }
+
+    private void playNextLineup() {
+        // TODO : ONGOING, Server nextLineup query
+        // TODO : If the response is not empty, call loadYouTube()
+        // TODO : else, stop the video.
+    }
+
+    // TODO : ONGOING, Implement this
+    public boolean isVideoLoaded() {
+        return false;
+    }
+
+    // TODO : ONGOING, set (timerCallback / youtubeVideoEndCallback), get nextLineup
+    // TODO : load video from server
+    // public void ?? () {}
+
 }
 
 class PlayGroupPager extends FragmentStatePagerAdapter {
