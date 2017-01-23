@@ -19,9 +19,14 @@ import java.util.ArrayList;
 
 public class VideoAdapter extends BaseAdapter {
     ArrayList<VideoData> videos;
+    private String currentPlayingVideo_id = "";
 
     public VideoAdapter() {
         videos = new ArrayList<>();
+    }
+
+    public VideoAdapter(String currentPlayingVideo_id) {
+        this.currentPlayingVideo_id = currentPlayingVideo_id;
     }
 
     @Override
@@ -53,6 +58,12 @@ public class VideoAdapter extends BaseAdapter {
         ((TextView)convertView.findViewById(R.id.item_video_uploader))
                 .setText(videos.get(position).getUploader());
 
+        if(currentPlayingVideo_id.length()>0 && videos.get(position).get_id().equals(currentPlayingVideo_id)) {
+            convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0x33111188);
+        } else {
+            convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0xffffff);
+        }
+
         return convertView;
     }
 
@@ -72,13 +83,29 @@ public class VideoAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void add(String _id, String url, String title, String uploader, String thumbnail, String playerID,
+                    String playerName, Long startedAt, Long duration, int like) {
+        videos.add(new VideoData(_id, url, title, uploader, thumbnail, playerID, playerName, startedAt, duration, like));
+        notifyDataSetChanged();
+    }
+
     public void add(VideoData videoData) {
         videos.add(videoData);
         notifyDataSetChanged();
     }
+
+    public void setCurrentPlayingVideo_id(String currentPlayingVideo_id) {
+        this.currentPlayingVideo_id = currentPlayingVideo_id;
+        notifyDataSetChanged();
+    }
+
+    public String getCurrentPlayingVideo_id() {
+        return currentPlayingVideo_id;
+    }
 }
 
 class VideoData {
+    private String _id;
     private String url;
     private String title;
     private String uploader;
@@ -90,14 +117,8 @@ class VideoData {
     private Long duration;
     private int like;
 
-    public VideoData(String url, String title, String uploader, String thumbnail) {
-        this.url = url;
-        this.title = title;
-        this.uploader = uploader;
-        this.thumbnail = thumbnail;
-    }
-
-    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, Long startedAt, Long duration, Integer like) {
+    public VideoData(String _id, String url, String title, String uploader, String thumbnail, String playerID, String playerName, Long startedAt, Long duration, Integer like) {
+        this._id = _id;
         this.url = url;
         this.title = title;
         this.uploader = uploader;
@@ -107,6 +128,35 @@ class VideoData {
         this.startedAt = startedAt;
         this.duration = duration;
         this.like = like;
+    }
+
+    public VideoData(String url, String title, String uploader, String thumbnail) {
+        this._id = "";
+        this.url = url;
+        this.title = title;
+        this.uploader = uploader;
+        this.thumbnail = thumbnail;
+    }
+
+    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, Long startedAt, Long duration, int like) {
+        this._id = "";
+        this.url = url;
+        this.title = title;
+        this.uploader = uploader;
+        this.thumbnail = thumbnail;
+        this.playerID = playerID;
+        this.playerName = playerName;
+        this.startedAt = startedAt;
+        this.duration = duration;
+        this.like = like;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getUrl() {
