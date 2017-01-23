@@ -320,5 +320,18 @@ app.post('/group/new/', function(req, res) {
     });
 });
 
+// GET request for remove group
+app.get('/group/remove/:groupID', function(req, res) {
+    console.log("[/group/remove/:groupID] Got request");
+
+    Group.remove({_id : req.params.groupID}, function(err) {
+        if (err) throw err;
+
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.write(JSON.stringify({result:'OK'}));
+        res.end();
+    });
+});
+
 app.listen(8080, function() {console.log("Listening on port #8080")});
 
