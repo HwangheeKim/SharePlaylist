@@ -118,8 +118,8 @@ public class PlayGroupLineup extends Fragment {
                     }
                     adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
                             record.get("thumbnail").getAsString(), record.get("playerID").getAsString(),
-                            record.get("startedAt").getAsString(), playerNameDecoded,
-                            record.get("duration").getAsString(), record.get("like").getAsInt());
+                            playerNameDecoded, record.get("startedAt").getAsLong(),
+                            record.get("duration").getAsLong(), record.get("like").getAsInt());
                 }
             }
         });

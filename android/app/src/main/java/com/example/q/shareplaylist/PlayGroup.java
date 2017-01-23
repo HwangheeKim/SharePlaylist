@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,6 @@ public class PlayGroup extends Fragment {
         viewPager.setAdapter(pagerAdapter);
 
         initYouTube();
-        playNextLineup();
 
         return rootView;
     }
@@ -65,6 +65,7 @@ public class PlayGroup extends Fragment {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
                 mYouTubePlayer = youTubePlayer;
                 setUpYouTubeListener();
+                playNextLineup();
             }
 
             @Override
@@ -94,19 +95,17 @@ public class PlayGroup extends Fragment {
     }
 
     public void playNextLineup() {
-        // TODO : ONGOING, Server nextLineup query
-        // TODO : If the response is not empty, call loadYouTube()
-        // TODO : else, stop the video.
         Ion.with(getContext()).load(MainActivity.serverURL+"/group/"+MainActivity.currentGroup+"/nextLineup")
                 .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
             @Override
             public void onCompleted(Exception e, JsonObject result) {
                 if(!result.has("_id")) {
-                    // TODO : stop the video
                     isLoaded = false;
-
                 } else {
                     isLoaded = true;
+                    Log.d("currentTimeMillis", ""+System.currentTimeMillis());
+                    loadYouTube(result.get("url").getAsString(),
+                            (int)(System.currentTimeMillis() - result.get("startedAt").getAsLong()));
                 }
             }
         });
