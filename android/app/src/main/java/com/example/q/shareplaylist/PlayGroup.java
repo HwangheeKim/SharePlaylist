@@ -31,7 +31,6 @@ public class PlayGroup extends Fragment {
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer mYouTubePlayer;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
-    private String testvideo="ePpPVE-GGJw";
     private boolean isLoaded = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,7 +92,6 @@ public class PlayGroup extends Fragment {
     private void loadYouTube(String url_id , int millis) {
         if(millis < 0) millis = 0;
         mYouTubePlayer.loadVideo(url_id, millis);
-        lineup.adapter.setNowPlayingURL(url_id);
 
     }
 
@@ -104,11 +102,11 @@ public class PlayGroup extends Fragment {
             public void onCompleted(Exception e, JsonObject result) {
                 if(!result.has("_id")) {
                     isLoaded = false;
-                    lineup.adapter.setNowPlayingURL("");
                 } else {
                     isLoaded = true;
                     loadYouTube(result.get("url").getAsString(),
                             (int)(System.currentTimeMillis() - result.get("startedAt").getAsLong()));
+                    lineup.adapter.setCurrentPlayingVideo_id(result.get("_id").getAsString());
                 }
             }
         });

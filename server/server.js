@@ -181,7 +181,7 @@ app.post('/group/:groupID/removeLineup', function(req, res) {
     console.log("[/group/:groupID/removeLineup] Got request");
 
     Group.findByIdAndUpdate(req.params.groupID,
-            {$pull: {"videoLineup": {url: req.body['url'], playerID: req.body['playerID']}}},
+            {$pull: {"videoLineup": {_id: req.body['_id'], url: req.body['url'], playerID: req.body['playerID']}}},
             function(err, model) {
                 if (err) throw err;
 

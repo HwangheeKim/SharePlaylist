@@ -64,7 +64,9 @@ public class PlayGroupLineup extends Fragment {
                             }
                         });
 
-                if (adapter.getItem(position).getPlayerID().equals(MainActivity.userID)) {
+                if (adapter.getItem(position).getPlayerID().equals(MainActivity.userID) &&
+                        adapter.getItem(position).getStartedAt() >= 10000000000000L &&
+                        !adapter.getCurrentPlayingVideo_id().equals(adapter.getItem(position).get_id())) {
                     builder.setNegativeButton("Remove from lineup", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -82,6 +84,7 @@ public class PlayGroupLineup extends Fragment {
 
     private void removeLineup(final int position) {
         JsonObject json = new JsonObject();
+        json.addProperty("_id", adapter.getItem(position).get_id());
         json.addProperty("url", adapter.getItem(position).getUrl());
         json.addProperty("playerID", adapter.getItem(position).getPlayerID());
 
@@ -116,7 +119,8 @@ public class PlayGroupLineup extends Fragment {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                    adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
+                    adapter.add(record.get("_id").getAsString(),
+                            record.get("url").getAsString(), titleDecoded, uploaderDecoded,
                             record.get("thumbnail").getAsString(), record.get("playerID").getAsString(),
                             playerNameDecoded, record.get("startedAt").getAsLong(),
                             record.get("duration").getAsLong(), record.get("like").getAsInt());
