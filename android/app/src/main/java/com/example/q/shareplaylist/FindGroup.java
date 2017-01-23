@@ -104,17 +104,34 @@ public class FindGroup extends Fragment {
                     public void onCompleted(Exception e, JsonArray result) {
                         for (int i=0 ; i<result.size() ; i++) {
                             JsonObject record = result.get(i).getAsJsonObject();
+                            final String groupID = record.get("_id").getAsString();
                             String groupNameDecoded = "";
+                            final String creatorID = record.get("creatorID").getAsString();
                             String creatorDecoded = "";
+                            String thumbnail = "";
+                            int status = 0;
                             try {
                                 groupNameDecoded = URLDecoder.decode(record.get("groupName").getAsString(), "utf-8");
                                 creatorDecoded = URLDecoder.decode(record.get("creatorName").getAsString(), "utf-8");
                             } catch (Exception e1) {
                                 e1.printStackTrace();
                             }
-                            // TODO : Thumbnail fetching, Server status
-                            groupAdapter.add(record.get("_id").getAsString(), groupNameDecoded,
-                                    record.get("creatorID").getAsString(), creatorDecoded, "", 0);
+                            final String finalGroupNameDecoded = groupNameDecoded;
+                            final String finalCreatorDecoded = creatorDecoded;
+
+                            Ion.with(getContext()).load(MainActivity.serverURL + "/group/info/" + groupID)
+                                    .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    if(result.has("thumbnail")) {
+                                        groupAdapter.add(groupID, finalGroupNameDecoded, creatorID, finalCreatorDecoded,
+                                                result.get("thumbnail").getAsString(), result.get("count").getAsInt());
+                                    } else {
+                                        groupAdapter.add(groupID, finalGroupNameDecoded, creatorID, finalCreatorDecoded,
+                                                "", result.get("count").getAsInt());
+                                    }
+                                }
+                            });
                         }
                     }
                 });
