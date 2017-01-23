@@ -3,57 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="160dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:translationZ="1dp"
-        android:layout_margin="10dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/account"/>
-        <TextView
-            android:id="@+id/item_group_status"
+    <FrameLayout
+        android:translationZ="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:text="3"/>
-    </LinearLayout>
+            android:translationZ="1dp"
+            android:layout_margin="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/account"/>
+            <TextView
+                android:id="@+id/item_group_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="3"/>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:translationZ="1dp"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/item_group_name"
-            android:text="Gamsung Chungman"
-            android:textColor="#fff"
-            android:textSize="25dp"
-            android:textStyle="bold"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:translationZ="1dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center">
 
-        <TextView
-            android:id="@+id/item_group_creator"
-            android:text="Hwanghee Kim"
-            android:textColor="#fff"
-            android:textSize="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/item_group_name"
+                android:text="Gamsung Chungman"
+                android:textColor="#fff"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/item_group_creator"
+                android:text="Hwanghee Kim"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <ImageView
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:translationZ="4dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/facebook_bg"
-        android:scaleType="centerCrop"/>
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/item_group_overlay"
+            android:translationZ="2dp"
+            android:background="#66000000"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:translationZ="1dp"
+            android:id="@+id/item_group_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/facebook_bg"
+            android:scaleType="centerCrop"/>
+
+    </FrameLayout>
 
 
 </FrameLayout>
