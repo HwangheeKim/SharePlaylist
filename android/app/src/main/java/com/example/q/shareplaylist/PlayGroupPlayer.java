@@ -60,6 +60,7 @@ public class PlayGroupPlayer extends Fragment {
 
     public void setPlayingInfoJson(JsonObject result){
         this.result=result;
+        setPlayingInfo();
     }
 
     public void setPlayingInfo(){
