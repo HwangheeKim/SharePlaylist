@@ -51,8 +51,8 @@ var groupSchema = new Schema({
                     thumbnail: {type:String},
                     playerID: {type:String},
                     playerName: {type:String},
-                    startedAt: {type:Date, default:defaultDate},
-                    duration: {type:String},
+                    startedAt: {type:Number, default:defaultDate},
+                    duration: {type:Number},
                     like: {type:Number, default:0}}]
 });
 var Group = mongoose.model('Groups', groupSchema, 'Groups');
@@ -161,6 +161,8 @@ app.get('/group/:groupID', function(req, res) {
 app.post('/group/:groupID/addLineup', function(req, res) {
     console.log("[/group/:groupID/addLineup] Got request");
 
+    req.body['duration'] = duration(req.body['duration']);
+
     Group.findByIdAndUpdate(req.params.groupID,
             {$push: {"videoLineup": req.body}},
             {safe: true, upsert: true, new: true},
@@ -199,7 +201,7 @@ app.get('/group/:groupID/nextLineup', function(req, res) {
         var lineup = result['videoLineup'];
         for (var i=0 ; i<lineup.length ; i++) {
             // If the video has already been finished, continue to next one
-            if (lineup[i].startedAt.valueOf() + duration(lineup[i].duration) < Date.now()) continue;
+            if (lineup[i].startedAt.valueOf() + lineup[i].duration < Date.now()) continue;
 
             // If somevideo is still playing, return that
             // If the video has not yet been played, return that & set startedAt to now
