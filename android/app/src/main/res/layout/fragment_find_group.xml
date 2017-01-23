@@ -46,7 +46,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:textColor="#c771ed"
+                    android:textColor="#ffffff"
                     android:hint="Search you group here"
                     android:textColorHint="#9e66a6"/>
                 
@@ -63,6 +63,8 @@
         android:layout_margin="16dp"
         android:layout_gravity="end|bottom"
         android:src="@drawable/plus"
+        app:backgroundTint="#f1baf3"
+        app:rippleColor="#5d4970"
         app:layout_anchor="@+id/findgroup_nestedview"
         app:layout_anchorGravity="bottom|end"
         />
@@ -72,8 +74,8 @@
         app:layout_anchorGravity="top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
         android:fillViewport="true"
+        android:background="#59535e"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v4.widget.SwipeRefreshLayout

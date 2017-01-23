@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 
 public class GroupAdapter extends BaseAdapter {
-    private int colors[] = {0xff372049, 0xff5d4970, 0xfff1baf3, 0xfffaeeff, 0x59535e};
+    private int colors[] = {0xff372049, 0xff5e3055, 0xff642e70, 0xff372049};
     ArrayList<GroupData> groupDatas;
 
     public GroupAdapter() {

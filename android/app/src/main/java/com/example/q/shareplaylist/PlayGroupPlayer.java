@@ -45,12 +45,13 @@ public class PlayGroupPlayer extends Fragment {
         uploader=(TextView)view.findViewById(R.id.uploader);
         title= (TextView)view.findViewById(R.id.title);
         player=(TextView)view.findViewById(R.id.player);
-        setTypeface();
+//        setTypeface();
         setPlayingInfo();
 
         return view;
     }
 
+    /*
     private void setTypeface(){
         Typeface myTypeface = Typeface.createFromAsset(getActivity().getAssets(), "Cassandra.ttf");
         TextView uploaded = (TextView)view.findViewById(R.id.textView2);
@@ -58,6 +59,7 @@ public class PlayGroupPlayer extends Fragment {
         uploaded.setTypeface(myTypeface);
         played.setTypeface(myTypeface);
     }
+    */
 
     public void setPlayingInfoJson(JsonObject result, boolean setplaying){
         this.result=result;
