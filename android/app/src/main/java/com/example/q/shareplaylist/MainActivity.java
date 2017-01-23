@@ -16,6 +16,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -194,15 +195,13 @@ public class MainActivity extends AppCompatActivity
         request.executeAsync();
     }
 
-
-
-
     private void enrollMe() {
         JsonObject json = new JsonObject();
 
         try {
             json.addProperty("userID", userID);
             json.addProperty("userName", URLEncoder.encode(userName, "utf-8"));
+            json.addProperty("userToken", FirebaseInstanceId.getInstance().getToken());
             json.addProperty("picture", "https://graph.facebook.com/" + userID + "/picture?height=500");
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,10 @@
 package com.example.q.shareplaylist;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +27,7 @@ public class PlayGroupLineup extends Fragment {
     View rootView;
     ListView listView;
     VideoAdapter adapter;
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +40,7 @@ public class PlayGroupLineup extends Fragment {
         listView.setAdapter(adapter);
 
         loadFromServer();
+        registerBroadcastReceiver();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,7 +113,7 @@ public class PlayGroupLineup extends Fragment {
             public void onCompleted(Exception e, JsonObject result) {
                 Log.d("Lineup Request", result.get("videoLineup").getAsJsonArray().toString());
                 JsonArray lineup = result.get("videoLineup").getAsJsonArray();
-                for (int i=0 ; i<lineup.size() ; i++) {
+                for (int i=lineup.size()-1 ; i>=0 ; i--) {
                     JsonObject record = lineup.get(i).getAsJsonObject();
                     String titleDecoded = "";
                     String uploaderDecoded = "";
@@ -155,16 +161,36 @@ public class PlayGroupLineup extends Fragment {
                         .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
-                                loadFromServer();
+//                                loadFromServer();
                                 if(!isVideoLoaded())
                                     ((MainActivity)getActivity()).playNextLineup();
                             }
                         });
             }
         });
+    }
 
+    private void registerBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.q.shareplaylist.LINEUP_BROADCAST");
 
-        // TODO : Notify other users (data set changed through Firebase)
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("Get FCM", "GOT FCM FROM THE SERVER, refresh!");
+                loadFromServer();
+                if(!isVideoLoaded())
+                    ((MainActivity)getActivity()).playNextLineup();
+            }
+        };
+
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        getActivity().unregisterReceiver(broadcastReceiver);
+        super.onDestroyView();
     }
 
     private boolean isVideoLoaded() {
