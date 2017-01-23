@@ -35,7 +35,8 @@ public class PlayGroupPlayer extends Fragment {
     private TextView player;
     private TextView title;
 
-    private JsonObject result = null;
+    private JsonObject result;
+    private boolean playing = false;
 
     @Nullable
     @Override
@@ -58,17 +59,26 @@ public class PlayGroupPlayer extends Fragment {
         played.setTypeface(myTypeface);
     }
 
-    public void setPlayingInfoJson(JsonObject result){
+    public void setPlayingInfoJson(JsonObject result, boolean setplaying){
         this.result=result;
+        playing=setplaying;
+        setPlayingInfo();
     }
 
     public void setPlayingInfo(){
         if(result==null)
             return;
         try {
-            title.setText(URLDecoder.decode(result.get("title").getAsString(), "utf-8"));
-            uploader.setText(URLDecoder.decode(result.get("uploader").getAsString(), "utf-8"));
-            player.setText(URLDecoder.decode(result.get("playerName").getAsString(), "utf-8"));
+            if(playing) {
+                title.setText(URLDecoder.decode(result.get("title").getAsString(), "utf-8"));
+                uploader.setText(URLDecoder.decode(result.get("uploader").getAsString(), "utf-8"));
+                player.setText(URLDecoder.decode(result.get("playerName").getAsString(), "utf-8"));
+            }
+            else{
+                title.setText("");
+                uploader.setText("");
+                player.setText("");
+            }
         }catch(Exception e){e.printStackTrace();}
     }
 
