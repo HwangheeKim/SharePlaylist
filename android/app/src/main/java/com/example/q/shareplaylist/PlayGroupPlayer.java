@@ -35,6 +35,8 @@ public class PlayGroupPlayer extends Fragment {
     private TextView player;
     private TextView title;
 
+    private JsonObject result = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class PlayGroupPlayer extends Fragment {
         title= (TextView)view.findViewById(R.id.title);
         player=(TextView)view.findViewById(R.id.player);
         setTypeface();
+        setPlayingInfo();
 
         return view;
     }
@@ -55,15 +58,18 @@ public class PlayGroupPlayer extends Fragment {
         played.setTypeface(myTypeface);
     }
 
-    public void setPlayingInfo(JsonObject result){
+    public void setPlayingInfoJson(JsonObject result){
+        this.result=result;
+    }
+
+    public void setPlayingInfo(){
+        if(result==null)
+            return;
         try {
             title.setText(URLDecoder.decode(result.get("title").getAsString(), "utf-8"));
             uploader.setText(URLDecoder.decode(result.get("uploader").getAsString(), "utf-8"));
             player.setText(URLDecoder.decode(result.get("playerName").getAsString(), "utf-8"));
         }catch(Exception e){e.printStackTrace();}
-
-
-
     }
 
 
