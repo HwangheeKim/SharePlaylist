@@ -63,6 +63,7 @@ public class PlayGroupAddVideo extends Fragment {
     }
 
     public void loadPlaylist() {
+        if(MainActivity.userID.equals("")) { return; }
         adapter.clear();
         Ion.with(getContext()).load(MainActivity.serverURL+"/user/" + MainActivity.userID)
                 .asJsonObject().setCallback(new FutureCallback<JsonObject>() {

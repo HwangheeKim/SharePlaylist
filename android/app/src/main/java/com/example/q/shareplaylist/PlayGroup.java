@@ -1,11 +1,13 @@
 package com.example.q.shareplaylist;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,9 @@ import android.view.ViewGroup;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 
 public class PlayGroup extends Fragment {
@@ -24,8 +29,10 @@ public class PlayGroup extends Fragment {
     PlayGroupAddVideo addVideo;
 
     private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayer mYouTubePlayer;
     private YouTubePlayer.OnInitializedListener onInitializedListener;
     private String testvideo="ePpPVE-GGJw";
+    private boolean isLoaded = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +63,9 @@ public class PlayGroup extends Fragment {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
-                youTubePlayer.loadVideo(testvideo, 10000);
+                mYouTubePlayer = youTubePlayer;
+                setUpYouTubeListener();
+                playNextLineup();
             }
 
             @Override
@@ -65,12 +74,7 @@ public class PlayGroup extends Fragment {
             }
         };
         youTubePlayerFragment.initialize("AIzaSyDDN48pBGknlr4oU8_-HEY1d2gMerq5mxw", onInitializedListener);
-    }
-
-    private VideoData nextLineup() {
-        // TODO : ONGOING, !!URGENT!!, get next lineup
-        return null;
-    }
+}
 
     @Override
     public void onDestroyView() {
@@ -84,6 +88,62 @@ public class PlayGroup extends Fragment {
         android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(youTubePlayerFragment);
         fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    private void loadYouTube(String url_id , int millis) {
+        if(millis < 0) millis = 0;
+        mYouTubePlayer.loadVideo(url_id, millis);
+    }
+
+    public void playNextLineup() {
+        Ion.with(getContext()).load(MainActivity.serverURL+"/group/"+MainActivity.currentGroup+"/nextLineup")
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+            @Override
+            public void onCompleted(Exception e, JsonObject result) {
+                if(!result.has("_id")) {
+                    isLoaded = false;
+                } else {
+                    isLoaded = true;
+                    loadYouTube(result.get("url").getAsString(),
+                            (int)(System.currentTimeMillis() - result.get("startedAt").getAsLong()));
+                }
+            }
+        });
+    }
+
+    private void setUpYouTubeListener(){
+        mYouTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+            }
+
+            @Override
+            public void onLoaded(String s) {
+            }
+
+            @Override
+            public void onAdStarted() {
+            }
+
+            @Override
+            public void onVideoStarted() {
+            }
+
+            @Override
+            public void onVideoEnded() {
+                playNextLineup();
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+            }
+        });
+
+
+    }
+
+    public boolean isVideoLoaded() {
+        return isLoaded;
     }
 }
 

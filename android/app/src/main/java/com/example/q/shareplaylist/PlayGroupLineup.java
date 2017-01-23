@@ -118,8 +118,8 @@ public class PlayGroupLineup extends Fragment {
                     }
                     adapter.add(record.get("url").getAsString(), titleDecoded, uploaderDecoded,
                             record.get("thumbnail").getAsString(), record.get("playerID").getAsString(),
-                            record.get("startedAt").getAsString(), playerNameDecoded,
-                            record.get("duration").getAsString(), record.get("like").getAsInt());
+                            playerNameDecoded, record.get("startedAt").getAsLong(),
+                            record.get("duration").getAsLong(), record.get("like").getAsInt());
                 }
             }
         });
@@ -152,6 +152,8 @@ public class PlayGroupLineup extends Fragment {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 loadFromServer();
+                                if(!isVideoLoaded())
+                                    ((MainActivity)getActivity()).playNextLineup();
                             }
                         });
             }
@@ -159,5 +161,9 @@ public class PlayGroupLineup extends Fragment {
 
 
         // TODO : Notify other users (data set changed through Firebase)
+    }
+
+    private boolean isVideoLoaded() {
+        return ((MainActivity)getActivity()).isVideoLoaded();
     }
 }

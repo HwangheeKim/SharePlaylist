@@ -67,7 +67,7 @@ public class VideoAdapter extends BaseAdapter {
     }
 
     public void add(String url, String title, String uploader, String thumbnail, String playerID,
-                    String playerName, String startedAt, String duration, int like) {
+                    String playerName, Long startedAt, Long duration, int like) {
         videos.add(new VideoData(url, title, uploader, thumbnail, playerID, playerName, startedAt, duration, like));
         notifyDataSetChanged();
     }
@@ -86,8 +86,8 @@ class VideoData {
 
     private String playerID;
     private String playerName;
-    private String startedAt;
-    private String duration;
+    private Long startedAt;
+    private Long duration;
     private int like;
 
     public VideoData(String url, String title, String uploader, String thumbnail) {
@@ -97,7 +97,7 @@ class VideoData {
         this.thumbnail = thumbnail;
     }
 
-    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, String startedAt, String duration, Integer like) {
+    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, Long startedAt, Long duration, Integer like) {
         this.url = url;
         this.title = title;
         this.uploader = uploader;
@@ -157,19 +157,19 @@ class VideoData {
         this.playerName = playerName;
     }
 
-    public String getStartedAt() {
+    public Long getStartedAt() {
         return startedAt;
     }
 
-    public void setStartedAt(String startedAt) {
+    public void setStartedAt(Long startedAt) {
         this.startedAt = startedAt;
     }
 
-    public String getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 
