@@ -97,6 +97,7 @@ public class FindGroup extends Fragment {
      */
     public void loadFromServer() {
         groupAdapter.clear();
+        groupAdapter.notifyDataSetChanged();
         Ion.with(getContext()).load(MainActivity.serverURL + "/group/all")
                 .asJsonArray()
                 .setCallback(new FutureCallback<JsonArray>() {
