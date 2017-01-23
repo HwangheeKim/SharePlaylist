@@ -67,6 +67,7 @@ public class MyPlaylist extends Fragment {
                             public void onCompleted(Exception e, JsonObject result) {
                                 adapter.clear();
                                 loadFromServer();
+                                adapter.notifyDataSetChanged();
                             }
                         });
                     }
