@@ -25,11 +25,6 @@ import org.json.JSONObject;
 import java.net.URLDecoder;
 
 public class PlayGroupPlayer extends Fragment {
-    private YouTubePlayerView youTubePlayerView;
-    private YouTubePlayerFragment youTubePlayerFragment;
-    private YouTubePlayer.OnInitializedListener onInitializedListener;
-    private int initTime;
-
     private View view;
     private TextView uploader;
     private TextView player;
@@ -47,6 +42,8 @@ public class PlayGroupPlayer extends Fragment {
         player=(TextView)view.findViewById(R.id.player);
 //        setTypeface();
         setPlayingInfo();
+
+        // TODO : ONGOING, show Group Name
 
         return view;
     }
@@ -83,6 +80,4 @@ public class PlayGroupPlayer extends Fragment {
             }
         }catch(Exception e){e.printStackTrace();}
     }
-
-
 }

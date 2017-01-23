@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     static String userBirthday = "";
     static String userAge_range = "";
     static String currentGroup = "";
+    static String currentGroupName = "";
     static String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
 
     private DrawerLayout drawer;

@@ -1,6 +1,7 @@
 package com.example.q.shareplaylist;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,10 +55,36 @@ public class FindGroup extends Fragment {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 MainActivity.currentGroup = groupAdapter.getItem(position).getGroupID();
+                                MainActivity.currentGroupName = groupAdapter.getItem(position).getGroupName();
                                 Intent intent = new Intent();
                                 ((MainActivity)getActivity()).onActivityResult(MainActivity.GROUP_SELECTED, Activity.RESULT_OK, intent);
                             }
                         });
+            }
+        });
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                if (MainActivity.userID.equals(groupAdapter.getItem(position).getCreatorID())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            .setMessage("Delete " + groupAdapter.getItem(position).getGroupName() + "?")
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Ion.with(getContext()).load(MainActivity.serverURL+"/group/remove/"
+                                            + groupAdapter.getItem(position).getGroupID())
+                                            .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                                        @Override
+                                        public void onCompleted(Exception e, JsonObject result) {
+                                            loadFromServer();
+                                        }
+                                    });
+                                }
+                            });
+
+                    builder.create().show();
+                }
+                return true;
             }
         });
 
