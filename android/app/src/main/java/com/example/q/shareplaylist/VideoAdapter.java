@@ -56,10 +56,19 @@ public class VideoAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void clear() { videos.clear(); }
+    public void clear() {
+        videos.clear();
+        notifyDataSetChanged();
+    }
 
     public void add(String url, String title, String uploader, String thumbnail) {
         videos.add(new VideoData(url, title, uploader, thumbnail));
+        notifyDataSetChanged();
+    }
+
+    public void add(String url, String title, String uploader, String thumbnail, String playerID,
+                    String playerName, String startedAt, String duration, int like) {
+        videos.add(new VideoData(url, title, uploader, thumbnail, playerID, playerName, startedAt, duration, like));
         notifyDataSetChanged();
     }
 
@@ -75,11 +84,29 @@ class VideoData {
     private String uploader;
     private String thumbnail;
 
+    private String playerID;
+    private String playerName;
+    private String startedAt;
+    private String duration;
+    private int like;
+
     public VideoData(String url, String title, String uploader, String thumbnail) {
         this.url = url;
         this.title = title;
         this.uploader = uploader;
         this.thumbnail = thumbnail;
+    }
+
+    public VideoData(String url, String title, String uploader, String thumbnail, String playerID, String playerName, String startedAt, String duration, Integer like) {
+        this.url = url;
+        this.title = title;
+        this.uploader = uploader;
+        this.thumbnail = thumbnail;
+        this.playerID = playerID;
+        this.playerName = playerName;
+        this.startedAt = startedAt;
+        this.duration = duration;
+        this.like = like;
     }
 
     public String getUrl() {
@@ -112,5 +139,45 @@ class VideoData {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(String startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
     }
 }

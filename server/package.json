@@ -12,6 +12,7 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "fcm-push": "^1.1.2",
+    "iso8601-duration": "^1.0.6",
     "mongoose": "^4.7.2",
     "multer": "^1.2.1"
   }

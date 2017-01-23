@@ -85,7 +85,7 @@ public class FindGroup extends Fragment {
         });
 
 
-        // TODO : Search group
+        // TODO : (Minor) Search group
 
         loadFromServer();
 
