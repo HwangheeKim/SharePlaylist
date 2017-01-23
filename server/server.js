@@ -99,7 +99,7 @@ app.get('/user/:userID', function(req, res) {
 app.post('/user/enroll', function(req, res) {
     console.log("[user/enroll] Got request");
 
-    User.findOneAndUpdate({userID:req.body['userID']}, req.body, {upsert:true}, function(err, doc) {
+    User.findOneAndUpdate({userID:req.body['userID']}, req.body, {upsert:true, new:true}, function(err, doc) {
         if (err) return res.send(500, {error: err});
 
         console.log("DONE ENROLL NEW USER " + JSON.stringify(req.body));
