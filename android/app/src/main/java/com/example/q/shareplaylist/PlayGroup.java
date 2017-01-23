@@ -91,6 +91,7 @@ public class PlayGroup extends Fragment {
     }
 
     private void loadYouTube(String url_id , int millis) {
+        if(millis < 0) millis = 0;
         mYouTubePlayer.loadVideo(url_id, millis);
     }
 
@@ -103,7 +104,6 @@ public class PlayGroup extends Fragment {
                     isLoaded = false;
                 } else {
                     isLoaded = true;
-                    Log.d("currentTimeMillis", ""+System.currentTimeMillis());
                     loadYouTube(result.get("url").getAsString(),
                             (int)(System.currentTimeMillis() - result.get("startedAt").getAsLong()));
                 }
