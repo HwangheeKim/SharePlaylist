@@ -64,6 +64,7 @@ public class PlayGroup extends Fragment {
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
                 mYouTubePlayer = youTubePlayer;
+                setUpYouTubeListener();
             }
 
             @Override
@@ -88,9 +89,8 @@ public class PlayGroup extends Fragment {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    // TODO : ONGOING, implement load video function
-    private void loadYouTube(/* URL? , from when?*/) {
-        mYouTubePlayer.loadVideo("", 0);
+    private void loadYouTube(String url_id , int millis) {
+        mYouTubePlayer.loadVideo(url_id, millis);
     }
 
     public void playNextLineup() {
@@ -110,6 +110,37 @@ public class PlayGroup extends Fragment {
                 }
             }
         });
+    }
+
+    private void setUpYouTubeListener(){
+        mYouTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+            }
+
+            @Override
+            public void onLoaded(String s) {
+            }
+
+            @Override
+            public void onAdStarted() {
+            }
+
+            @Override
+            public void onVideoStarted() {
+            }
+
+            @Override
+            public void onVideoEnded() {
+                playNextLineup();
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+            }
+        });
+
+
     }
 
     public boolean isVideoLoaded() {

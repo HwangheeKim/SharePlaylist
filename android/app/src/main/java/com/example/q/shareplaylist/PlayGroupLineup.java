@@ -152,9 +152,8 @@ public class PlayGroupLineup extends Fragment {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 loadFromServer();
-
-                                // TODO : ONGOING, If video is loaded, nothing special
-                                // TODO : ONGOING, If there's no video, get nextLineup and play
+                                if(!isVideoLoaded())
+                                    ((MainActivity)getActivity()).playNextLineup();
                             }
                         });
             }
