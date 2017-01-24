@@ -3,35 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.q.shareplaylist.MyPlaylist">
+    tools:context="com.example.q.shareplaylist.MyPlaylist"
+    android:id="@+id/FrameLayout">
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="@color/com_facebook_blue"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="#f1baf3"
+        app:rippleColor="#5d4970"
+        android:src="@drawable/plus"
         android:id="@+id/floatingActionButton"
         android:layout_margin="16dp"/>
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/myPlayListView"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="85dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/myPlayList"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="35dp"
-        android:id="@+id/myPlayList"
-        android:text="My Playlist"
-        android:paddingTop="15dp"
-        android:paddingBottom="20dp"
-        android:background="#98D9FF"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="35dp"
+            android:id="@+id/myPlayList"
+            android:text="My Playlist"
+            android:fontFamily="sans-serif-thin"
+            android:padding="10dp"
+            android:background="#521c59"
+            android:textColor="#fff"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#44cccccc"
+            android:dividerHeight="1px"
+            android:layout_weight="1"
+            android:id="@+id/myPlayListView"
+            android:layout_centerHorizontal="true"
+            android:background="#000000"/>
+
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

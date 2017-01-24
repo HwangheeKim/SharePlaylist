@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.google.gson.JsonArray;
@@ -28,13 +29,14 @@ public class MyPlaylist extends Fragment {
     ListView listView;
     VideoAdapter adapter;
     String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
-
+    FrameLayout frameLayout;
+    loaderActivity itsNotReallyAnActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_my_playlist, container, false);
-
+        frameLayout=(FrameLayout)rootView.findViewById(R.id.FrameLayout);
         listView = (ListView) rootView.findViewById(R.id.myPlayListView);
 
         adapter = new VideoAdapter();
@@ -47,7 +49,9 @@ public class MyPlaylist extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final int pos=position;
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("delete?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setMessage("Delete " + adapter.getItem(position).getTitle() + "?")
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String url=adapter.getItem(pos).getUrl();
@@ -75,8 +79,12 @@ public class MyPlaylist extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent searchIntent = new Intent(getContext(), loaderActivity.class);
-                getActivity().startActivityForResult(searchIntent, MainActivity.SELECT_UPLOAD);
+                itsNotReallyAnActivity = new loaderActivity(getContext(), getActivity());
+                frameLayout.addView(itsNotReallyAnActivity.getView());
+                ((MainActivity)getActivity()).myplaylistonsearch=true;
+//
+//                Intent searchIntent = new Intent(getContext(), loaderActivity.class);
+//                getActivity().startActivityForResult(searchIntent, MainActivity.SELECT_UPLOAD);
             }
         });
 

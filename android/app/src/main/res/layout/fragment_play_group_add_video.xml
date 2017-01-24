@@ -1,6 +1,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#000"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,16 +18,36 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#fff"
+            android:textColorHint="#999"
+            android:backgroundTint="#ad0505"
+            android:textCursorDrawable="@null"
+            android:imeOptions="actionDone"
             android:hint="Search on YouTube"/>
-        <Button
+
+        <FrameLayout
             android:id="@+id/playgroup_add_button"
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="4"/>
+            android:layout_weight="5">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/youtube_icon"/>
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <ListView
         android:id="@+id/playgroup_add_list"
+        android:divider="#44cccccc"
+        android:dividerHeight="1px"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

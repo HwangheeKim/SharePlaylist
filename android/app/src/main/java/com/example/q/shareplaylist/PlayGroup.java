@@ -50,6 +50,7 @@ public class PlayGroup extends Fragment {
         pagerAdapter = new PlayGroupPager(getActivity().getSupportFragmentManager(),
                                           player, lineup, addVideo);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
 
         initYouTube();
 

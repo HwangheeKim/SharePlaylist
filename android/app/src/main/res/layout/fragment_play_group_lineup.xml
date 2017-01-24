@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.q.shareplaylist.PlayGroupLineup">
 
-    <!-- TODO : Add swipe refresh layout -->
-
     <ListView
         android:id="@+id/playgroup_lineup_list"
+        android:divider="#44cccccc"
+        android:dividerHeight="1px"
+        android:background="#000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

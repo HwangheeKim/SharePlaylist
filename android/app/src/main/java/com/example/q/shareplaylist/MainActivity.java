@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
     static int ADD_GROUP = 0x1002;
     static int GROUP_SELECTED = 0x1003;
     static int PLAY_GROUP = 0x1004;
-    static int SELECT_UPLOAD= 0x1005;
     static String serverURL = "http://52.78.101.202:8080";
     static String userID = "";
     static String userName = "";
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private MyProfile myProfile;
     private PlayGroup playGroup;
     private int menuNumber = 1;
+    public boolean myplaylistonsearch=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
+            /*
             case R.id.drawer_me:
                 if(userID.equals("")) {
                     Snackbar.make(findViewById(R.id.main_container), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity
                     menuNumber = 0;
                 }
                 break;
+                */
             case R.id.drawer_findgroup:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 menuNumber = 1;
@@ -145,17 +147,19 @@ public class MainActivity extends AppCompatActivity
             playGroup = new PlayGroup();
             menuNumber=2;
             getSupportFragmentManager().beginTransaction().replace(R.id.main_container, playGroup).commit();
-        } else if(requestCode == SELECT_UPLOAD){
-            String[] str=data.getStringArrayExtra("video");
-            try{
-                myPlaylist.adapter.add(str[0], URLDecoder.decode(str[1],"utf-8"), URLDecoder.decode(str[2], "utf-8"), str[3]);
-                myPlaylist.adapter.notifyDataSetChanged();
-            }catch(Exception e){e.printStackTrace();}
-
-            Snackbar.make(myPlaylist.listView, "Video (" + str[1] + ") will be added", Snackbar.LENGTH_SHORT).show();
         }
-
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void selectUpload(String[] str, View view){
+        try{
+            myPlaylist.adapter.add(str[0], URLDecoder.decode(str[1],"utf-8"), URLDecoder.decode(str[2], "utf-8"), str[3]);
+            myPlaylist.adapter.notifyDataSetChanged();
+        }catch(Exception e){e.printStackTrace();}
+        myPlaylist.frameLayout.removeView(view);
+        myplaylistonsearch=false;
+
+        Snackbar.make(myPlaylist.listView, "Video (" + str[1] + ") will be added", Snackbar.LENGTH_SHORT).show();
     }
 
     static boolean isLoggedIn() {
@@ -215,7 +219,7 @@ public class MainActivity extends AppCompatActivity
                     public void onCompleted(Exception e, JsonObject result) {
                         Log.d("enrollMe onCompleted", result.toString());
 
-                        if(result.has("current")) {
+                        if(result.has("current") && !result.get("current").isJsonNull()) {
                             currentGroup = result.get("current").getAsString();
                         }
 
@@ -241,9 +245,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else if(myplaylistonsearch){
+            //TODO : do it
+            myPlaylist.frameLayout.removeView(myPlaylist.itsNotReallyAnActivity.getView());
+            myplaylistonsearch=false;
+        } else{
             super.onBackPressed();
         }
     }
@@ -258,4 +267,20 @@ public class MainActivity extends AppCompatActivity
 
     private void tt(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();}
+
+    @Override
+    protected void onPause() {
+
+        Ion.with(getApplicationContext()).load(serverURL+"/user/graduate/" + MainActivity.userID)
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                    }
+                });
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
+        menuNumber = 1;
+        currentGroup = "";
+        currentGroupName = "";
+        super.onPause();
+    }
 }

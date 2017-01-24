@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SharePlaylist</string>
+    <string name="app_name">쉐프</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">204099310055936</string>
