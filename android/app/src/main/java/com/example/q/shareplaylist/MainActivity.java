@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                     public void onCompleted(Exception e, JsonObject result) {
                         Log.d("enrollMe onCompleted", result.toString());
 
-                        if(result.has("current")) {
+                        if(result.has("current") && !result.get("current").isJsonNull()) {
                             currentGroup = result.get("current").getAsString();
                         }
 
@@ -260,4 +260,15 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();}
 
     // TODO : !!URGENT!! ?? ERROR??
+
+    @Override
+    protected void onPause() {
+        Ion.with(getApplicationContext()).load(serverURL+"/user/graduate/" + MainActivity.userID)
+                .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                    }
+                });
+        super.onPause();
+    }
 }
