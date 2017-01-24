@@ -43,8 +43,7 @@
                 android:ellipsize="end"
                 android:layout_weight="1"
                 android:textColor="#fff"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="sans-serif"
                 android:textSize="18dp"
                 android:text="Wine Dem"/>
 

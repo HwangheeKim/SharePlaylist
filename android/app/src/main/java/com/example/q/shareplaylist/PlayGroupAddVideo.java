@@ -54,7 +54,7 @@ public class PlayGroupAddVideo extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(listView, "Video (" + adapter.getItem(position).getTitle() + ") will be added", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(listView, "Video added to the lineup", Snackbar.LENGTH_SHORT).show();
 //                ((PlayGroup)getTargetFragment()).addVideoToLineup(adapter.getItem(position));
                 ((MainActivity)getActivity()).addVideoToLineup(adapter.getItem(position));
             }

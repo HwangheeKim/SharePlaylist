@@ -29,6 +29,7 @@ public class PlayGroupPlayer extends Fragment {
     private TextView uploader;
     private TextView player;
     private TextView title;
+    private TextView group;
 
     private JsonObject result;
     private boolean playing = false;
@@ -40,10 +41,12 @@ public class PlayGroupPlayer extends Fragment {
         uploader=(TextView)view.findViewById(R.id.uploader);
         title= (TextView)view.findViewById(R.id.title);
         player=(TextView)view.findViewById(R.id.player);
+        group=(TextView)view.findViewById(R.id.playgroup_player_groupName);
+
 //        setTypeface();
         setPlayingInfo();
 
-        // TODO : ONGOING, show Group Name
+        group.setText(MainActivity.currentGroupName);
 
         return view;
     }
