@@ -45,6 +45,9 @@ public class FindGroup extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                if(!MainActivity.isLoggedIn()) {
+                    Snackbar.make(rootView.findViewById(R.id.findgroup_coordinator), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
+                }
                 JsonObject json = new JsonObject();
                 json.addProperty("userID", MainActivity.userID);
                 json.addProperty("current", groupAdapter.getItem(position).getGroupID());
@@ -65,6 +68,9 @@ public class FindGroup extends Fragment {
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                if(!MainActivity.isLoggedIn()) {
+                    Snackbar.make(rootView.findViewById(R.id.findgroup_coordinator), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
+                }
                 if (MainActivity.userID.equals(groupAdapter.getItem(position).getCreatorID())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                             .setMessage("Delete " + groupAdapter.getItem(position).getGroupName() + "?")
