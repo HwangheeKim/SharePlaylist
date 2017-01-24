@@ -1,6 +1,7 @@
 package com.example.q.shareplaylist;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -28,29 +30,33 @@ import java.net.URLEncoder;
  * Created by q on 2017-01-22.
  */
 
-public class loaderActivity extends AppCompatActivity {
+public class loaderActivity {
 
-    EditText editText;
-    ListView listView;
-    VideoAdapter adapter;
-    String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
+    private View view;
+    private EditText editText;
+    private ListView listView;
+    private VideoAdapter adapter;
+    private Context context;
+    private Activity activity;
+    private String youtubeKey = "AIzaSyBOmiAJ9FD_IWza61CHPJCzZb8lj3gggrA";
 
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_play_group_add_video);
+    public loaderActivity(Context context, Activity activity) {
+        this.context=context;
+        this.activity=activity;
+        LayoutInflater inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.fragment_play_group_add_video, null);
 
-        editText = (EditText)findViewById(R.id.playgroup_add_search);
+        editText = (EditText)view.findViewById(R.id.playgroup_add_search);
 
-        listView = (ListView)findViewById(R.id.playgroup_add_list);
+        listView = (ListView)view.findViewById(R.id.playgroup_add_list);
         adapter = new VideoAdapter();
         listView.setAdapter(adapter);
 
 
 
         // Request Search query
-        findViewById(R.id.playgroup_add_button).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.playgroup_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Load search result to the list
@@ -68,9 +74,12 @@ public class loaderActivity extends AppCompatActivity {
                 addToPlayList(position);
             }
         });
-
-
     }
+
+    public View getView(){
+        return view;
+    }
+
 
     public void addToPlayList(int position){
         JsonObject jsonObject= new JsonObject();
@@ -81,16 +90,11 @@ public class loaderActivity extends AppCompatActivity {
         jsonObject.addProperty("title", URLEncoder.encode(video_String[1], "utf-8"));
         jsonObject.addProperty("uploader", URLEncoder.encode(video_String[2], "utf-8"));
         jsonObject.addProperty("thumbnail", video_String[3]);}catch(Exception e){e.printStackTrace();}
-        Ion.with(this).load(MainActivity.serverURL+"/user/myplaylist/" + MainActivity.userID).setJsonObjectBody(jsonObject)
+        Ion.with(context).load(MainActivity.serverURL+"/user/myplaylist/" + MainActivity.userID).setJsonObjectBody(jsonObject)
                 .asJsonArray().setCallback(new FutureCallback<JsonArray>() {
             @Override
             public void onCompleted(Exception e, JsonArray result) {
-                Intent intent = new Intent();
-                intent.putExtra("video", video_String);
-                setResult(RESULT_OK, intent);
-                finish();
-
-
+                ((MainActivity)activity).selectUpload(video_String, view);
                 //Log.d("Post to playlist", result.toString());
             }
         });
@@ -111,7 +115,7 @@ public class loaderActivity extends AppCompatActivity {
         }
         String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q="+keyword+"&type=video&videoDefinition=any&maxResults=20&key=" + youtubeKey;
 
-        Ion.with(this).load(url).asJsonObject()
+        Ion.with(context).load(url).asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
