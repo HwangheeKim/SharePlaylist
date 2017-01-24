@@ -269,6 +269,10 @@ public class MainActivity extends AppCompatActivity
                     public void onCompleted(Exception e, JsonObject result) {
                     }
                 });
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
+        menuNumber = 1;
+        currentGroup = "";
+        currentGroupName = "";
         super.onPause();
     }
 }
