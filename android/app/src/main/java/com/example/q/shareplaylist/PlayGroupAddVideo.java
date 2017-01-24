@@ -1,5 +1,7 @@
 package com.example.q.shareplaylist;
 
+import android.content.Context;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -47,6 +50,9 @@ public class PlayGroupAddVideo extends Fragment {
                     Snackbar.make(listView, "Enter the search keyword", Snackbar.LENGTH_SHORT).show();
                 } else {
                     youtubeSearch();
+                    ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });

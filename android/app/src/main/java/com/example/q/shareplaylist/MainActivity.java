@@ -259,8 +259,6 @@ public class MainActivity extends AppCompatActivity
     private void tt(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();}
 
-    // TODO : !!URGENT!! ?? ERROR??
-
     @Override
     protected void onPause() {
         Ion.with(getApplicationContext()).load(serverURL+"/user/graduate/" + MainActivity.userID)

@@ -45,7 +45,8 @@ public class PlayGroupLineup extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("What?")
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setMessage(adapter.getItem(position).getTitle())
                         .setPositiveButton("Add to my playlist", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
