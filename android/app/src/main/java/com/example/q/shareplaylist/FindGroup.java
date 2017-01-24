@@ -47,6 +47,7 @@ public class FindGroup extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if(!MainActivity.isLoggedIn()) {
                     Snackbar.make(rootView.findViewById(R.id.findgroup_coordinator), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
+                    return;
                 }
                 JsonObject json = new JsonObject();
                 json.addProperty("userID", MainActivity.userID);
@@ -70,6 +71,7 @@ public class FindGroup extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if(!MainActivity.isLoggedIn()) {
                     Snackbar.make(rootView.findViewById(R.id.findgroup_coordinator), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
+                    return true;
                 }
                 if (MainActivity.userID.equals(groupAdapter.getItem(position).getCreatorID())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
