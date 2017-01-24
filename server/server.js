@@ -99,10 +99,26 @@ app.get('/user/:userID', function(req, res) {
 app.post('/user/enroll', function(req, res) {
     console.log("[user/enroll] Got request");
 
+    if(!req.body.hasOwnProperty("current")) {
+        req.body['current'] = null;
+    }
+
     User.findOneAndUpdate({userID:req.body['userID']}, req.body, {upsert:true, new:true}, function(err, doc) {
         if (err) return res.send(500, {error: err});
 
         console.log("DONE ENROLL NEW USER " + JSON.stringify(req.body));
+        res.writeHead(200, {'Content-Type':'application/json'});
+        res.write(JSON.stringify(doc));
+        res.end();
+    });
+});
+
+// GET request for user remove token
+app.get('/user/graduate/:userID', function(req, res) {
+    console.log("[/user/graduate/:userID] Got request");
+
+    User.findOneAndUpdate({userID:req.params.userID}, {current: null}, function(err, doc) {
+        console.log("DONE UNGROUP USER " + JSON.stringify(req.body));
         res.writeHead(200, {'Content-Type':'application/json'});
         res.write(JSON.stringify(doc));
         res.end();
