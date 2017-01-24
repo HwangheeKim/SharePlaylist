@@ -112,9 +112,6 @@ public class FindGroup extends Fragment {
             }
         });
 
-
-        // TODO : (Minor) Search group
-
         loadFromServer();
 
         return rootView;

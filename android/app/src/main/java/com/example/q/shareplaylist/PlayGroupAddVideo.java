@@ -46,13 +46,13 @@ public class PlayGroupAddVideo extends Fragment {
             @Override
             public void onClick(View v) {
                 // Load search result to the list
+                ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                        .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
                 if(editText.getText().toString().equals("")) {
                     Snackbar.make(listView, "Enter the search keyword", Snackbar.LENGTH_SHORT).show();
                 } else {
                     youtubeSearch();
-                    ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });

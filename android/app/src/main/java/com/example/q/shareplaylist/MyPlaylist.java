@@ -49,7 +49,9 @@ public class MyPlaylist extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final int pos=position;
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext()).setMessage("delete?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setMessage("Delete " + adapter.getItem(position).getTitle() + "?")
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String url=adapter.getItem(pos).getUrl();

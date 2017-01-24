@@ -5,56 +5,7 @@
     android:id="@+id/findgroup_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/findgroup_appbar"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        app:elevation="5dp"
-        app:layout_collapseMode="pin"
-        android:fitsSystemWindows="true">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:toolbarId="@+id/findgroup_toolbar"
-            android:id="@+id/findgroup_collapsing"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/findgroup_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#521c59"
-                android:popupTheme="@style/Widget.AppCompat.ActionBar"
-                android:gravity="center"
-                app:layout_collapseMode="pin">
-
-                <!-- Dummy item to prevent EditText from receiving focus -->
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"/>
-
-                <EditText
-                    android:id="@+id/findgroup_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:textColor="#ffffff"
-                    android:hint="Search you group here"
-                    android:textColorHint="#9e66a6"/>
-                
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
+    android:background="#59535e" >
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/findgroup_fab"
@@ -65,21 +16,28 @@
         android:src="@drawable/plus"
         app:backgroundTint="#f1baf3"
         app:rippleColor="#5d4970"
-        app:layout_anchor="@+id/findgroup_nestedview"
-        app:layout_anchorGravity="bottom|end"
         />
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/findgroup_nestedview"
-        app:layout_anchorGravity="top"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="#59535e"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="35dp"
+            android:text="Find Group"
+            android:fontFamily="sans-serif-thin"
+            android:padding="10dp"
+            android:background="#521c59"
+            android:textColor="#fff"
+            />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/findgroup_swiperefresh"
+            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -92,7 +50,6 @@
                 android:layout_height="match_parent" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

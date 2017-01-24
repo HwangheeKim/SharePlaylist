@@ -68,8 +68,14 @@ public class PlayGroupPlayer extends Fragment {
     }
 
     public void setPlayingInfo(){
-        if(result==null)
+        if(!playing) {
+            view.findViewById(R.id.playgroup_player_information).setVisibility(View.GONE);
+            view.findViewById(R.id.playgroup_player_novideo).setVisibility(View.VISIBLE);
             return;
+        }
+
+        view.findViewById(R.id.playgroup_player_information).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.playgroup_player_novideo).setVisibility(View.GONE);
         try {
             if(playing) {
                 title.setText(URLDecoder.decode(result.get("title").getAsString(), "utf-8"));

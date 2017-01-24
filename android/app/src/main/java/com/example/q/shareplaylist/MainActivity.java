@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
+            /*
             case R.id.drawer_me:
                 if(userID.equals("")) {
                     Snackbar.make(findViewById(R.id.main_container), "You have to be logged in!", Snackbar.LENGTH_SHORT).show();
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity
                     menuNumber = 0;
                 }
                 break;
+                */
             case R.id.drawer_findgroup:
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_container, findGroup).commit();
                 menuNumber = 1;

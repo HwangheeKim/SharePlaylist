@@ -59,6 +59,14 @@ public class VideoAdapter extends BaseAdapter {
         ((TextView)convertView.findViewById(R.id.item_video_uploader))
                 .setText(videos.get(position).getUploader());
 
+        TextView duration = (TextView)convertView.findViewById(R.id.item_video_duration);
+        if(videos.get(position).getDuration()!=null) {
+            duration.setVisibility(View.VISIBLE);
+            duration.setText(durationLongToString(videos.get(position).getDuration()));
+        } else {
+            duration.setVisibility(View.GONE);
+        }
+
         if(currentPlayingVideo_id.length()>0 && videos.get(position).get_id().equals(currentPlayingVideo_id)) {
             convertView.findViewById(R.id.item_video_layout).setBackgroundColor(0x33e16060);
             convertView.findViewById(R.id.item_video_overlay).setVisibility(View.GONE);
@@ -71,6 +79,10 @@ public class VideoAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    private String durationLongToString(Long duration) {
+        return String.format("%,d:%02d", duration/60000, (duration%60000)/1000);
     }
 
     public void clear() {
